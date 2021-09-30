@@ -1,0 +1,94 @@
+Version: "0.1"
+Environment:
+  Name: Grafter
+  Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/. Grafter contains the same mechanics as Crafter, but has a bunch of extra features that Griddly comes with :D
+  Player:
+    Count: 1
+
+  Levels:
+    - |
+      .
+
+Actions:
+  - Name: move
+    Behaviours:
+      - Src:
+          Object: player
+          Commands:
+            - mov: _dest
+            # TODO: set the image depending on the direction of the avatar
+        Dst:
+          Object: [ grass, path, sand ]
+
+Objects:
+  - Name: player
+    MapCharacter: p
+    Observers:
+      Sprite2D:
+        - Image:
+          - player.png
+          - player-down.png
+          - player-left.png
+          - player-right.png
+          - player-up.png
+          - player-sleep.png
+  - Name: water
+    MapCharacter: W
+    Observers:
+      Sprite2D:
+        - Image: water.png
+  - Name: grass
+    MapCharacter: G
+    Observers:
+      Sprite2D:
+        - Image: grass.png
+  - Name: stone
+    MapCharacter: s
+    Observers:
+      Sprite2D:
+        - Image: stone.png
+  - Name: path
+    MapCharacter: P
+    Observers:
+      Sprite2D:
+        - Image: path.png
+  - Name: sand
+    MapCharacter: S
+    Observers:
+      Sprite2D:
+        - Image: sand.png
+  - Name: tree
+    MapCharacter: T
+    Observers:
+      Sprite2D:
+        - Image: tree.png
+  - Name: lava
+    MapCharacter: L
+    Observers:
+      Sprite2D:
+        - Image: lava.png
+  - Name: coal
+    MapCharacter: c
+    Observers:
+      Sprite2D:
+        - Image: coal.png
+  - Name: iron
+    MapCharacter: i
+    Observers:
+      Sprite2D:
+        - Image: iron.png
+  - Name: diamond
+    MapCharacter: d
+    Observers:
+      Sprite2D:
+        - Image: diamond.png
+  - Name: table
+    MapCharacter: t
+    Observers:
+      Sprite2D:
+        - Image: table.png
+  - Name: furnace
+    MapCharacter: f
+    Observers:
+      Sprite2D:
+        - Image: furnace.png
