@@ -1,2 +1,3 @@
 #griddly==1.2.8
 opensimplex==0.3
+pyglet==1.5.21

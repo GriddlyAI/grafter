@@ -2,8 +2,17 @@ Version: "0.1"
 Environment:
   Name: Grafter
   Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/. Grafter contains the same mechanics as Crafter, but has a bunch of extra features that Griddly comes with :D
+  Observers:
+    Sprite2D:
+      TileSize: [16,16]
   Player:
-    Count: 1
+    Count: 4
+    AvatarObject: player
+    Observer:
+      HighlightPlayers: false
+      TrackAvatar: true
+      Height: 9
+      Width: 9
 
   Levels:
     - |
@@ -11,84 +20,189 @@ Environment:
 
 Actions:
   - Name: move
+    InputMapping:
+      Inputs:
+        1:
+          OrientationVector: [ 1, 0 ]
+          VectorToDest: [ 1, 0 ]
+          MetaData:
+            image_idx: 1
+        2:
+          OrientationVector: [ 0, -1 ]
+          VectorToDest: [ 0, -1 ]
+          MetaData:
+            image_idx: 2
+        3:
+          OrientationVector: [ -1, 0 ]
+          VectorToDest: [ -1, 0 ]
+          MetaData:
+            image_idx: 3
+        4:
+          OrientationVector: [ 0, 1 ]
+          VectorToDest: [ 0, 1 ]
+          MetaData:
+            image_idx: 4
     Behaviours:
       - Src:
           Object: player
           Commands:
             - mov: _dest
-            # TODO: set the image depending on the direction of the avatar
+            - set_tile: meta.image_idx
         Dst:
           Object: [ grass, path, sand ]
+
+  # Random walk for cows
+  - Name: cow_random_movement
+    InputMapping:
+      Inputs:
+        1:
+          OrientationVector: [ 1, 0 ]
+          VectorToDest: [ 1, 0 ]
+          MetaData:
+            change_image: 1
+            image_idx: 1
+        2:
+          OrientationVector: [ 0, -1 ]
+          VectorToDest: [ 0, -1 ]
+          MetaData:
+            change_image: 0
+        3:
+          OrientationVector: [ -1, 0 ]
+          VectorToDest: [ -1, 0 ]
+          MetaData:
+            change_image: 1
+            image_idx: 0
+        4:
+          OrientationVector: [ 0, 1 ]
+          VectorToDest: [ 0, 1 ]
+          MetaData:
+            change_image: 0
+
+      Internal: true
+    Behaviours:
+
+      # The butterfly moves into an empty space
+      - Src:
+          Object: cow
+          Commands:
+            - mov: _dest
+            - exec:
+                Action: cow_random_movement
+                Delay: 1
+                Randomize: true
+            - eq:
+                Arguments: [ meta.change_image, 1 ]
+                Commands:
+                  - set_tile: meta.image_idx
+        Dst:
+          Object: [ grass, path, sand ]
+
+      # if the cow tries to move into anything but grass, path, sand
+      - Src:
+          Object: cow
+          Commands:
+            - exec:
+                Action: cow_random_movement
+                Delay: 1
+                Randomize: true
+        Dst:
+          Object: [ _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
 Objects:
   - Name: player
     MapCharacter: p
+    Z: 2
     Observers:
       Sprite2D:
-        - Image:
-          - player.png
-          - player-down.png
-          - player-left.png
-          - player-right.png
-          - player-up.png
-          - player-sleep.png
+        - Image: sprite2d/player.png
+        - Image: sprite2d/player-right.png
+        - Image: sprite2d/player-up.png
+        - Image: sprite2d/player-left.png
+        - Image: sprite2d/player-down.png
+        - Image: sprite2d/player-sleep.png
   - Name: water
     MapCharacter: W
     Observers:
       Sprite2D:
-        - Image: water.png
+        - Image: sprite2d/water.png
   - Name: grass
     MapCharacter: G
+    Z: 1
     Observers:
       Sprite2D:
-        - Image: grass.png
+        - Image: sprite2d/grass.png
   - Name: stone
     MapCharacter: s
     Observers:
       Sprite2D:
-        - Image: stone.png
+        - Image: sprite2d/stone.png
   - Name: path
+    Z: 1
     MapCharacter: P
     Observers:
       Sprite2D:
-        - Image: path.png
+        - Image: sprite2d/path.png
   - Name: sand
+    Z: 1
     MapCharacter: S
     Observers:
       Sprite2D:
-        - Image: sand.png
+        - Image: sprite2d/sand.png
   - Name: tree
     MapCharacter: T
     Observers:
       Sprite2D:
-        - Image: tree.png
+        - Image: sprite2d/tree.png
   - Name: lava
     MapCharacter: L
     Observers:
       Sprite2D:
-        - Image: lava.png
+        - Image: sprite2d/lava.png
   - Name: coal
     MapCharacter: c
     Observers:
       Sprite2D:
-        - Image: coal.png
+        - Image: sprite2d/coal.png
   - Name: iron
     MapCharacter: i
     Observers:
       Sprite2D:
-        - Image: iron.png
+        - Image: sprite2d/iron.png
   - Name: diamond
     MapCharacter: d
     Observers:
       Sprite2D:
-        - Image: diamond.png
+        - Image: sprite2d/diamond.png
   - Name: table
     MapCharacter: t
     Observers:
       Sprite2D:
-        - Image: table.png
+        - Image: sprite2d/table.png
   - Name: furnace
     MapCharacter: f
     Observers:
       Sprite2D:
-        - Image: furnace.png
+        - Image: sprite2d/furnace.png
+
+  - Name: zombie
+    Z: 2
+    MapCharacter: '!'
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/zombie.png
+  - Name: skeleton
+    Z: 2
+    MapCharacter: '@'
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/skeleton.png
+  - Name: cow
+    InitialActions:
+      - Action: cow_random_movement
+        Randomize: true
+    Z: 2
+    MapCharacter: '#'
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/cow-left.png
+        - Image: sprite2d/cow-right.png

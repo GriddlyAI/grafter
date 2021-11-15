@@ -6,9 +6,9 @@ from griddly import GymWrapper, gd
 from grafter.level_generators.crafter_generator import CrafterLevelGenerator
 
 
-class GrafterWrapper(gym.Env):
+class GrafterWrapper(gym.Wrapper):
 
-    def __init__(self, width, height, seed=100, player_observer_type=gd.ObserverType.VECTOR, global_observer_type=gd.ObserverType.SPRITE_2D):
+    def __init__(self, width, height, seed=100, player_observer_type=gd.ObserverType.SPRITE_2D, global_observer_type=gd.ObserverType.SPRITE_2D):
 
         current_file = Path(__file__).parent
         self._genv = GymWrapper(
@@ -20,14 +20,20 @@ class GrafterWrapper(gym.Env):
             image_path=str(current_file.joinpath('assets')),
         )
 
-        self._generator = CrafterLevelGenerator(seed, width, height, 1)
+        self._generator = CrafterLevelGenerator(seed, width, height, self._genv.player_count)
+
+        super().__init__(self._genv)
 
     def step(self, action):
-        return self._genv.step(action)
+        return self.env.step(action)
 
     def reset(self):
         level_string = self._generator.generate()
-        self._genv.reset(level_string=level_string)
+        reset_obs = self.env.reset(level_string=level_string)
+        self.action_space = self.env.action_space
+        self.observation_space = self.env.action_space
 
-    def render(self, mode="human"):
-        pass
+        return reset_obs
+
+    def render(self, mode='human', observer=0):
+        return self.env.render(mode=mode, observer=observer)
