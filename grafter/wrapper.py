@@ -8,19 +8,20 @@ from grafter.level_generators.crafter_generator import CrafterLevelGenerator
 
 class GrafterWrapper(gym.Wrapper):
 
-    def __init__(self, width, height, seed=100, player_observer_type=gd.ObserverType.VECTOR, global_observer_type=gd.ObserverType.VECTOR):
+    def __init__(self, width, height, generator_seed=100, player_observer_type=gd.ObserverType.SPRITE_2D, global_observer_type=gd.ObserverType.SPRITE_2D):
 
         current_file = Path(__file__).parent
         self._genv = GymWrapper(
             yaml_file='grafter_base.yaml',
             global_observer_type=global_observer_type,
             player_observer_type=player_observer_type,
-            max_steps=1000,
+            max_steps=None,
             gdy_path=str(current_file.joinpath('gdy')),
+            shader_path=str(current_file.joinpath('assets/shaders')),
             image_path=str(current_file.joinpath('assets')),
         )
 
-        self._generator = CrafterLevelGenerator(seed, width, height, self._genv.player_count)
+        self._generator = CrafterLevelGenerator(generator_seed, width, height, self._genv.player_count)
 
         super().__init__(self._genv)
 
