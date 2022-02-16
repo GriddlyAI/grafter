@@ -137,7 +137,7 @@ class CrafterLevelGenerator(LevelGenerator):
             sizes = {sizes: 1}
         value = 0
         for size, weight in sizes.items():
-            value += weight * simplex.noise3d(x / size, y / size, z)
+            value += weight * simplex.noise3(x / size, y / size, z)
         if normalize:
             value /= sum(sizes.values())
         return value
