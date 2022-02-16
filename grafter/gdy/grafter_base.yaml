@@ -1,18 +1,20 @@
 Version: "0.1"
 Environment:
   Name: Grafter
-  Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/. Grafter contains the same mechanics as Crafter, but has a bunch of extra features that Griddly comes with :D
+  Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/.
   Observers:
     Sprite2D:
-      TileSize: [16,16]
+      TileSize: [ 48, 48 ]
   Player:
-    Count: 4
+    Count: 1
     AvatarObject: player
     Observer:
       HighlightPlayers: false
       TrackAvatar: true
-      Height: 9
-      Width: 9
+      RotateWithAvatar: true
+      RotateAvatarImage: false
+#      Height: 9
+#      Width: 9
 
   Levels:
     - |
@@ -23,8 +25,8 @@ Actions:
     InputMapping:
       Inputs:
         1:
-          OrientationVector: [ 1, 0 ]
-          VectorToDest: [ 1, 0 ]
+          OrientationVector: [ -1, 0 ]
+          VectorToDest: [ -1, 0 ]
           MetaData:
             image_idx: 1
         2:
@@ -33,8 +35,8 @@ Actions:
           MetaData:
             image_idx: 2
         3:
-          OrientationVector: [ -1, 0 ]
-          VectorToDest: [ -1, 0 ]
+          OrientationVector: [ 1, 0 ]
+          VectorToDest: [ 1, 0 ]
           MetaData:
             image_idx: 3
         4:
@@ -50,8 +52,98 @@ Actions:
             - set_tile: meta.image_idx
         Dst:
           Object: [ grass, path, sand ]
+      - Src:
+          Object: player
+          Commands:
+            - set_tile: meta.image_idx
+        Dst:
+          Object: [ cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
-  # Random walk for cows
+  #  - Name: zombie_random_movement
+#    InputMapping:
+#      Internal: true
+#    Behaviours:
+#      - Src:
+#          Preconditions:
+#            - eq: [ is_chasing, 0 ]
+#          Object: zombie
+#          Commands:
+#            - mov: _dest
+#            - eq:
+#                Arguments: [ is_chasing, 0 ]
+#                Commands:
+#                  - exec:
+#                      Action: zombie_random_movement
+#                      Delay: 10
+#                      Randomize: true
+#        Dst:
+#          Object: [ grass, path, sand ]
+#
+#      - Src:
+#          Object: zombie
+#          Preconditions:
+#            - eq: [ is_chasing, 0 ]
+#          Commands:
+#            - exec:
+#                Action: zombie_random_movement
+#                Delay: 10
+#                Randomize: true
+#        Dst:
+#          Object: [ cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+#
+  - Name: zombie_chase_player
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: zombie
+          Commands:
+            - set: [ chase_cooldown, 0 ]
+            - mov: _dest
+        Dst:
+          Object: [ grass, path, sand ]
+
+  - Name: zombie_chase_proximity_trigger_off
+    Trigger:
+      Range: 5
+      Type: RANGE_BOX_BOUNDARY
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: zombie
+          Commands:
+            - set: [ is_chasing, 0 ]
+        Dst:
+          Object: player
+
+  - Name: zombie_chase_proximity_trigger_on
+    Trigger:
+      Range: 4
+      Type: RANGE_BOX_AREA
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Preconditions:
+           - eq: [src.chase_cooldown, 0]
+          Object: zombie
+          Commands:
+            - set: [ is_chasing, 1 ]
+            - set: [ chase_cooldown, 1 ]
+            - exec:
+                Action: zombie_chase_player
+                Delay: 3
+                Search:
+                  ImpassableObjects: [ cow, water, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+                  TargetObjectName: player
+
+
+        Dst:
+          Object: player
+
+
+      # Random walk for cows
   - Name: cow_random_movement
     InputMapping:
       Inputs:
@@ -103,10 +195,10 @@ Actions:
           Commands:
             - exec:
                 Action: cow_random_movement
-                Delay: 1
+                Delay: 5
                 Randomize: true
         Dst:
-          Object: [ _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
 Objects:
   - Name: player
@@ -115,9 +207,9 @@ Objects:
     Observers:
       Sprite2D:
         - Image: sprite2d/player.png
-        - Image: sprite2d/player-right.png
-        - Image: sprite2d/player-up.png
         - Image: sprite2d/player-left.png
+        - Image: sprite2d/player-up.png
+        - Image: sprite2d/player-right.png
         - Image: sprite2d/player-down.png
         - Image: sprite2d/player-sleep.png
   - Name: water
@@ -186,6 +278,16 @@ Objects:
 
   - Name: zombie
     Z: 2
+#    InitialActions:
+#      - Action: zombie_random_movement
+#        Randomize: true
+    Variables:
+      - Name: health
+        InitialValue: 10
+      - Name: is_chasing
+        InitialValue: 0
+      - Name: chase_cooldown
+        InitialValue: 0
     MapCharacter: '!'
     Observers:
       Sprite2D:

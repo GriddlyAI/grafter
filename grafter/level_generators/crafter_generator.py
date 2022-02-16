@@ -57,7 +57,7 @@ class CrafterLevelGenerator(LevelGenerator):
         player_location_valid = False
 
         while not player_location_valid:
-            player_pos = possible_locations[np.random.choice(len(possible_locations))]
+            player_pos = possible_locations[self._random.choice(len(possible_locations))]
             dist = self._get_min_player_distance(player_pos, players)
             possible_locations.remove(player_pos)
 
@@ -67,7 +67,7 @@ class CrafterLevelGenerator(LevelGenerator):
 
     def _set_material(self, world, pos, simplex, tunnels):
         x, y = pos
-        start_x, start_y = np.random.randint((0,0),(self._width, self._height))
+        start_x, start_y = self._random.randint((0,0),(self._width, self._height))
         simplex = functools.partial(self._simplex, simplex)
         uniform = self._random.uniform
         start = 4 - np.sqrt((x - start_x) ** 2 + (y - start_y) ** 2)
@@ -137,7 +137,7 @@ class CrafterLevelGenerator(LevelGenerator):
             sizes = {sizes: 1}
         value = 0
         for size, weight in sizes.items():
-            value += weight * simplex.noise3d(x / size, y / size, z)
+            value += weight * simplex.noise3(x / size, y / size, z)
         if normalize:
             value /= sum(sizes.values())
         return value

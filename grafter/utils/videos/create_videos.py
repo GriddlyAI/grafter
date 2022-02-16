@@ -5,24 +5,24 @@ from griddly.RenderTools import VideoRecorder
 
 if __name__ == '__main__':
 
-    env = GrafterWrapper(100, 100)
+    env = GrafterWrapper(30, 30)
     env.reset()
 
     initial_obs = env.render(observer='global', mode='rgb_array')
 
     global_recorder = VideoRecorder()
-    global_recorder.start('global_video.mp4', initial_obs.shape)
+    global_recorder.start('videos/global_video.mp4', initial_obs.shape)
 
     player_recorders = []
     for p in range(env.player_count):
         player_recorder = VideoRecorder()
         initial_obs = env.render(observer=p, mode='rgb_array')
-        player_recorder.start(f'player_{p}_video.mp4', initial_obs.shape)
+        player_recorder.start(f'videos/player_{p}_video.mp4', initial_obs.shape)
 
         player_recorders.append(player_recorder)
 
     # Replace with your own control algorithm!
-    for s in range(10000):
+    for s in range(1000):
         obs, reward, done, info = env.step(env.action_space.sample())
 
         for p in range(env.player_count):
