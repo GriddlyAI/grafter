@@ -3,12 +3,12 @@ import sys
 import os
 
 module_path = os.path.dirname(os.path.realpath(__file__))
-grafter_path = os.path.join(module_path, '../../../')
+grafter_path = os.path.join(module_path, "../../../")
 
 sys.path.extend([grafter_path])
 from grafter.wrapper import GrafterWrapper
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     env = GrafterWrapper(200, 200)
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         if done:
             end = timeit.default_timer()
-            print(f'{frames / (end - start):.2f} SPS')
+            print(f"{frames / (end - start):.2f} SPS")
             frames = 0
             env.reset()
             start = timeit.default_timer()

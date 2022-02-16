@@ -3,13 +3,14 @@ import pygame
 from grafter.wrapper import GrafterWrapper
 
 KEYWORD_TO_KEY = {
-    (ord('d'),): [0, 1],
-    (ord('w'),): [0, 2],
-    (ord('a'),): [0, 3],
-    (ord('s'),): [0, 4],
+    (ord("d"),): [0, 1],
+    (ord("w"),): [0, 2],
+    (ord("a"),): [0, 3],
+    (ord("s"),): [0, 4],
 }
 
 from pygame.locals import VIDEORESIZE
+
 
 class PlayWrapper(gym.Wrapper):
     """
@@ -17,18 +18,23 @@ class PlayWrapper(gym.Wrapper):
     """
 
     def __init__(self, env, seed=100):
-        assert isinstance(env, GrafterWrapper), "This wrapper only works with the GrafterWrapper environment"
+        assert isinstance(
+            env, GrafterWrapper
+        ), "This wrapper only works with the GrafterWrapper environment"
         super().__init__(env)
 
         self._seed = seed
 
-
     def _display_arr(self, screen, arr, video_size, transpose):
-        pyg_img = pygame.surfarray.make_surface(arr.swapaxes(0, 1) if transpose else arr)
+        pyg_img = pygame.surfarray.make_surface(
+            arr.swapaxes(0, 1) if transpose else arr
+        )
         pyg_img = pygame.transform.scale(pyg_img, video_size)
         screen.blit(pyg_img, (0, 0))
 
-    def play(self, transpose=True, fps=5, zoom=None, callback=None, keys_to_action=None):
+    def play(
+        self, transpose=True, fps=5, zoom=None, callback=None, keys_to_action=None
+    ):
         """Allows one to play the game using keyboard.
 
         To simply play the game use:
@@ -95,9 +101,9 @@ class PlayWrapper(gym.Wrapper):
                 keys_to_action = self.env.unwrapped.get_keys_to_action()
             else:
                 assert False, (
-                        self.env.spec.id
-                        + " does not have explicit key to action mapping, "
-                        + "please specify one manually"
+                    self.env.spec.id
+                    + " does not have explicit key to action mapping, "
+                    + "please specify one manually"
                 )
         relevant_keys = set(sum(map(list, keys_to_action.keys()), []))
 
@@ -124,7 +130,9 @@ class PlayWrapper(gym.Wrapper):
                     callback(prev_obs, obs, action, rew, env_done, info)
             if obs is not None:
                 rendered = self.env.render(mode="rgb_array")
-                self._display_arr(screen, rendered, transpose=transpose, video_size=video_size)
+                self._display_arr(
+                    screen, rendered, transpose=transpose, video_size=video_size
+                )
 
             # process pygame events
             for event in pygame.event.get():
@@ -150,8 +158,8 @@ class PlayWrapper(gym.Wrapper):
 
     def _callback(self, prev_obs, obs, action, rew, env_done, info):
         if rew != 0:
-            print(f'\nReward: {rew}')
+            print(f"\nReward: {rew}")
         if env_done:
-            print(f'Done!')
+            print(f"Done!")
         if len(info) > 0:
             print(info)
