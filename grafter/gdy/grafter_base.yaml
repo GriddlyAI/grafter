@@ -59,37 +59,34 @@ Actions:
         Dst:
           Object: [ cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
-  #  - Name: zombie_random_movement
-#    InputMapping:
-#      Internal: true
-#    Behaviours:
-#      - Src:
-#          Preconditions:
-#            - eq: [ is_chasing, 0 ]
-#          Object: zombie
-#          Commands:
-#            - mov: _dest
-#            - eq:
-#                Arguments: [ is_chasing, 0 ]
-#                Commands:
-#                  - exec:
-#                      Action: zombie_random_movement
-#                      Delay: 10
-#                      Randomize: true
-#        Dst:
-#          Object: [ grass, path, sand ]
-#
-#      - Src:
-#          Object: zombie
-#          Preconditions:
-#            - eq: [ is_chasing, 0 ]
-#          Commands:
-#            - exec:
-#                Action: zombie_random_movement
-#                Delay: 10
-#                Randomize: true
-#        Dst:
-#          Object: [ cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+  - Name: zombie_random_movement
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: zombie
+          Preconditions:
+            - eq: [ is_chasing, 0 ]
+          Commands:
+            - mov: _dest
+            - exec:
+                Action: zombie_random_movement
+                Delay: 10
+                Randomize: true
+        Dst:
+          Object: [ grass, path, sand ]
+
+      - Src:
+          Object: zombie
+          Preconditions:
+            - eq: [ is_chasing, 0 ]
+          Commands:
+            - exec:
+                Action: zombie_random_movement
+                Delay: 10
+                Randomize: true
+        Dst:
+          Object: [ _boundary, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 #
   - Name: zombie_chase_player
     InputMapping:
@@ -112,8 +109,14 @@ Actions:
     Behaviours:
       - Src:
           Object: zombie
+          Preconditions:
+            - eq: [ is_chasing, 1 ]
           Commands:
             - set: [ is_chasing, 0 ]
+            - exec:
+                Action: zombie_random_movement
+                Delay: 10
+                Randomize: true
         Dst:
           Object: player
 
@@ -137,8 +140,6 @@ Actions:
                 Search:
                   ImpassableObjects: [ cow, water, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
                   TargetObjectName: player
-
-
         Dst:
           Object: player
 
@@ -278,9 +279,10 @@ Objects:
 
   - Name: zombie
     Z: 2
-#    InitialActions:
-#      - Action: zombie_random_movement
-#        Randomize: true
+    InitialActions:
+      - Action: zombie_random_movement
+        Delay: 1
+        Randomize: true
     Variables:
       - Name: health
         InitialValue: 10
