@@ -186,8 +186,10 @@ Actions:
 
       - Src:
           Object: arrow
+          Commands:
+            - remove: true
         Dst:
-          Object: [ cow, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: set_arrow_direction
     InputMapping:
@@ -254,17 +256,17 @@ Actions:
       Internal: true
     Behaviours:
       - Src:
-          Preconditions:
-            - eq: [ src.reload_cooldown, 0 ]
+#          Preconditions:
+#            - eq: [ src.reload_cooldown, 0 ]
           Object: skeleton
           Commands:
-            - set: [ reload_cooldown, 1 ]
+            #- set: [ reload_cooldown, 1 ]
             - exec:
                 Action: fire_arrow
                 Randomize: true
-            - exec:
-                 Action: reload_arrow
-                 Delay: 1
+#            - exec:
+#                 Action: reload_arrow
+#                 Delay: 1
         Dst:
           Object: player
 ###########################################################
@@ -498,6 +500,7 @@ Objects:
         - Image: sprite2d/furnace.png
 
   - Name: arrow
+    Z: 2
     MapCharacter: a
     InitialActions:
       - Action: set_arrow_direction
