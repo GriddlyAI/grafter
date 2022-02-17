@@ -58,6 +58,218 @@ Actions:
             - set_tile: meta.image_idx
         Dst:
           Object: [ cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          
+################# SKELETON MECHANICS ######################
+  - Name: skeleton_random_movement
+    InputMapping:
+      Inputs:
+        1:
+          OrientationVector: [ 0, -1 ]
+          VectorToDest: [ 0, -1 ]
+        2:
+          OrientationVector: [ 1, 0 ]
+          VectorToDest: [ 1, 0 ]
+        3:
+          OrientationVector: [ 0, 1 ]
+          VectorToDest: [ 0, 1 ]
+        4:
+          OrientationVector: [ -1, 0 ]
+          VectorToDest: [ -1, 0 ]
+      Internal: true
+    Behaviours:
+    - Src:
+        Object: skeleton
+        Preconditions:
+          - eq: [ is_chasing, 0 ]
+        Commands:
+          - mov: _dest
+          - exec:
+              Action: skeleton_random_movement
+              Delay: 3
+              Randomize: true
+      Dst:
+        Object: [ path ]
+
+    - Src:
+        Object: skeleton
+        Preconditions:
+          - eq: [ is_chasing, 0 ]
+        Commands:
+          - exec:
+              Action: skeleton_random_movement
+              Delay: 3
+              Randomize: true
+      Dst:
+        Object: [ _boundary, _empty, grass, sand, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
+  - Name: skeleton_chase_player
+    InputMapping:
+      Inputs:
+        1:
+          OrientationVector: [ 0, -1 ]
+          VectorToDest: [ 0, -1 ]
+        2:
+          OrientationVector: [ 1, 0 ]
+          VectorToDest: [ 1, 0 ]
+        3:
+          OrientationVector: [ 0, 1 ]
+          VectorToDest: [ 0, 1 ]
+        4:
+          OrientationVector: [ -1, 0 ]
+          VectorToDest: [ -1, 0 ]
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: skeleton
+          Commands:
+            - set: [ chase_cooldown, 0 ]
+            - mov: _dest
+        Dst:
+          Object: [ path ]
+
+  - Name: skeleton_chase_proximity_trigger_off
+    Trigger:
+      Range: 9
+      Type: RANGE_BOX_BOUNDARY
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: skeleton
+          Preconditions:
+            - eq: [ is_chasing, 1 ]
+          Commands:
+            - set: [ is_chasing, 0 ]
+            - exec:
+                Action: skeleton_random_movement
+                Delay: 3
+                Randomize: true
+        Dst:
+          Object: player
+
+  - Name: skeleton_chase_proximity_trigger_on
+    Trigger:
+      Range: 8
+      Type: RANGE_BOX_AREA
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Preconditions:
+            - eq: [ src.chase_cooldown, 0 ]
+          Object: skeleton
+          Commands:
+            - set: [ is_chasing, 1 ]
+            - set: [ chase_cooldown, 1 ]
+            - exec:
+                Action: skeleton_chase_player
+                Delay: 3
+                Search:
+                  ImpassableObjects: [ water, stone, tree, coal, lava, iron, diamond, table, furnace ]
+                  TargetObjectName: player
+        Dst:
+          Object: player
+
+  - Name: arrow_projectile
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: arrow
+          Commands:
+            - mov: _dest
+            - exec:
+                Action: arrow_projectile
+                Delay: 1
+        Dst:
+          Object: [ water, path, grass, sand ]
+
+      - Src:
+          Object: arrow
+        Dst:
+          Object: [ cow, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
+  - Name: set_arrow_direction
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: arrow
+          Commands:
+            - set_tile: meta.image_idx
+        Dst:
+          Object: [ water, path, grass, sand  ]
+
+  - Name: fire_arrow
+    InputMapping:
+      Inputs:
+        1:
+          OrientationVector: [ 0, -1 ]
+          VectorToDest: [ 0, -1 ]
+          MetaData:
+            image_idx: 0
+        2:
+          OrientationVector: [ 1, 0 ]
+          VectorToDest: [ 1, 0 ]
+          MetaData:
+            image_idx: 1
+        3:
+          OrientationVector: [ 0, 1 ]
+          VectorToDest: [ 0, 1 ]
+          MetaData:
+            image_idx: 2
+        4:
+          OrientationVector: [ -1, 0 ]
+          VectorToDest: [ -1, 0 ]
+          MetaData:
+            image_idx: 3
+    Behaviours:
+      - Src:
+          Object: skeleton
+        Dst:
+          Object: [ water, path, grass, sand ]
+          Commands:
+            - spawn: arrow
+
+  - Name: reload_arrow
+    InputMapping:
+      Inputs:
+        1:
+          VectorToDest: [0, 0]
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: skeleton
+          Commands:
+            - set: [ reload_cooldown, 0 ]
+        Dst:
+          Object: skeleton
+
+  - Name: skeleton_fire_proximity_trigger
+    #Probability: 0.5
+    Trigger:
+      Range: 5
+      Type: RANGE_BOX_AREA
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Preconditions:
+            - eq: [ src.reload_cooldown, 0 ]
+          Object: skeleton
+          Commands:
+            - set: [ reload_cooldown, 1 ]
+            - exec:
+                Action: fire_arrow
+                Randomize: true
+            - exec:
+                 Action: reload_arrow
+                 Delay: 1
+        Dst:
+          Object: player
+###########################################################
+
+##################### ZOMBIE MECHANICS ####################
 
   - Name: zombie_random_movement
     InputMapping:
@@ -71,11 +283,10 @@ Actions:
             - mov: _dest
             - exec:
                 Action: zombie_random_movement
-                Delay: 10
+                Delay: 3
                 Randomize: true
         Dst:
           Object: [ grass, path, sand ]
-
       - Src:
           Object: zombie
           Preconditions:
@@ -83,11 +294,11 @@ Actions:
           Commands:
             - exec:
                 Action: zombie_random_movement
-                Delay: 10
+                Delay: 3
                 Randomize: true
         Dst:
-          Object: [ _boundary, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
-#
+          Object: [ _boundary, _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
   - Name: zombie_chase_player
     InputMapping:
       Internal: true
@@ -100,9 +311,16 @@ Actions:
         Dst:
           Object: [ grass, path, sand ]
 
+      - Src:
+          Object: zombie
+          Commands:
+            - set: [ chase_cooldown, 0 ]
+        Dst:
+          Object: [ _boundary, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
   - Name: zombie_chase_proximity_trigger_off
     Trigger:
-      Range: 5
+      Range: 9
       Type: RANGE_BOX_BOUNDARY
     InputMapping:
       Internal: true
@@ -115,14 +333,14 @@ Actions:
             - set: [ is_chasing, 0 ]
             - exec:
                 Action: zombie_random_movement
-                Delay: 10
+                Delay: 3
                 Randomize: true
         Dst:
           Object: player
-
+#
   - Name: zombie_chase_proximity_trigger_on
     Trigger:
-      Range: 4
+      Range: 8
       Type: RANGE_BOX_AREA
     InputMapping:
       Internal: true
@@ -136,15 +354,17 @@ Actions:
             - set: [ chase_cooldown, 1 ]
             - exec:
                 Action: zombie_chase_player
-                Delay: 3
+                Delay: 2
                 Search:
-                  ImpassableObjects: [ cow, water, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+                  ImpassableObjects: [ water, stone, tree, coal, lava, iron, diamond, table, furnace ]
                   TargetObjectName: player
         Dst:
           Object: player
+###########################################################
 
+################### COW MECHANICS #########################
 
-      # Random walk for cows
+  # Random walk for cows
   - Name: cow_random_movement
     InputMapping:
       Inputs:
@@ -174,7 +394,6 @@ Actions:
       Internal: true
     Behaviours:
 
-      # The butterfly moves into an empty space
       - Src:
           Object: cow
           Commands:
@@ -190,7 +409,6 @@ Actions:
         Dst:
           Object: [ grass, path, sand ]
 
-      # if the cow tries to move into anything but grass, path, sand
       - Src:
           Object: cow
           Commands:
@@ -200,6 +418,8 @@ Actions:
                 Randomize: true
         Dst:
           Object: [ _boundary, _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
+###########################################################
 
 Objects:
   - Name: player
@@ -277,15 +497,27 @@ Objects:
       Sprite2D:
         - Image: sprite2d/furnace.png
 
+  - Name: arrow
+    MapCharacter: a
+    InitialActions:
+      - Action: set_arrow_direction
+      - Action: arrow_projectile
+        Delay: 1
+    Observers:
+      Sprite2D:
+          - Image: sprite2d/arrow-up.png
+          - Image: sprite2d/arrow-right.png
+          - Image: sprite2d/arrow-down.png
+          - Image: sprite2d/arrow-left.png
+
   - Name: zombie
     Z: 2
     InitialActions:
       - Action: zombie_random_movement
-        Delay: 1
         Randomize: true
     Variables:
       - Name: health
-        InitialValue: 10
+        InitialValue: 5
       - Name: is_chasing
         InitialValue: 0
       - Name: chase_cooldown
@@ -294,12 +526,26 @@ Objects:
     Observers:
       Sprite2D:
         - Image: sprite2d/zombie.png
+
   - Name: skeleton
     Z: 2
     MapCharacter: '@'
+    InitialActions:
+      - Action: skeleton_random_movement
+        Randomize: true
+    Variables:
+      - Name: health
+        InitialValue: 3
+      - Name: is_chasing
+        InitialValue: 0
+      - Name: chase_cooldown
+        InitialValue: 0
+      - Name: reload_cooldown
+        InitialValue: 0
     Observers:
       Sprite2D:
         - Image: sprite2d/skeleton.png
+
   - Name: cow
     InitialActions:
       - Action: cow_random_movement

@@ -10,7 +10,7 @@ from grafter.wrapper import GrafterWrapper
 
 if __name__ == "__main__":
 
-    env = GrafterWrapper(200, 200)
+    env = GrafterWrapper(30, 30)
 
     env.reset()
 

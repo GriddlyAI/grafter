@@ -21,7 +21,6 @@ class GrafterWrapper(gym.Wrapper):
             yaml_file="grafter_base.yaml",
             global_observer_type=global_observer_type,
             player_observer_type=player_observer_type,
-            max_steps=None,
             gdy_path=str(current_file.joinpath("gdy")),
             shader_path=str(current_file.joinpath("assets/shaders")),
             image_path=str(current_file.joinpath("assets")),
