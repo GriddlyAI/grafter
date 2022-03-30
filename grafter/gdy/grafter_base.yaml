@@ -5,16 +5,41 @@ Environment:
   Observers:
     Sprite2D:
       TileSize: [ 48, 48 ]
+  Variables:
+    - Name: inventory_wood_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_stone_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_iron_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_wood_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_stone_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_iron_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_food
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inventory_sapling
+      InitialValue: 3
+      PerPlayer: true
   Player:
     Count: 1
     AvatarObject: player
     Observer:
       HighlightPlayers: false
       TrackAvatar: true
-      RotateWithAvatar: true
+      RotateWithAvatar: false
       RotateAvatarImage: false
-#      Height: 9
-#      Width: 9
+      Height: 9
+      Width: 9
 
   Levels:
     - |
@@ -49,17 +74,83 @@ Actions:
           Object: player
           Commands:
             - mov: _dest
+            - rot: _dir
             - set_tile: meta.image_idx
         Dst:
           Object: [ grass, path, sand ]
       - Src:
           Object: player
           Commands:
+            - rot: _dir
             - set_tile: meta.image_idx
         Dst:
-          Object: [ cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
-          
-################# SKELETON MECHANICS ######################
+          Object: [ cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
+  - Name: do
+    InputMapping:
+      Relative: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, -1 ]
+    Behaviours:
+      # Player eats a (ripe) plant
+      - Src:
+          Preconditions:
+            - eq: [ dst.ripe, 1 ]
+          Object: player
+          Commands:
+            - add: [ inventory_food, 4 ]
+        Dst:
+          Object: plant
+          Commands:
+            - set: [ ripe, 0 ]
+            - set_tile: 0
+            - exec:
+                Action: plant_ripen
+                Delay: 30
+                ActionId: 1
+
+  - Name: collect
+    InputMapping:
+      Relative: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, -1 ]
+    Behaviours:
+      # Player collects a sapling
+      - Src:
+          Object: player
+          Preconditions:
+            - lt: [ inventory_sapling, 9 ]
+          Commands:
+            - add: [ inventory_sapling, 1 ]
+        Dst:
+          Object: grass
+        # Probability: 0.1 https://github.com/Bam4d/Griddly/issues/179
+
+  - Name: place
+    InputMapping:
+      Relative: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, -1 ]
+    Behaviours:
+      # Player places a plant
+      - Src:
+          Object: player
+          Preconditions:
+            - gte: [ inventory_sapling, 1 ]
+          Commands:
+            - decr: inventory_sapling
+        Dst:
+          Object: grass
+          Commands:
+            - spawn: plant
+
+  #- Name: make
+
+
+  ################# SKELETON MECHANICS ######################
   - Name: skeleton_random_movement
     InputMapping:
       Inputs:
@@ -77,30 +168,30 @@ Actions:
           VectorToDest: [ -1, 0 ]
       Internal: true
     Behaviours:
-    - Src:
-        Object: skeleton
-        Preconditions:
-          - eq: [ is_chasing, 0 ]
-        Commands:
-          - mov: _dest
-          - exec:
-              Action: skeleton_random_movement
-              Delay: 3
-              Randomize: true
-      Dst:
-        Object: [ path ]
+      - Src:
+          Object: skeleton
+          Preconditions:
+            - eq: [ is_chasing, 0 ]
+          Commands:
+            - mov: _dest
+            - exec:
+                Action: skeleton_random_movement
+                Delay: 3
+                Randomize: true
+        Dst:
+          Object: [ path ]
 
-    - Src:
-        Object: skeleton
-        Preconditions:
-          - eq: [ is_chasing, 0 ]
-        Commands:
-          - exec:
-              Action: skeleton_random_movement
-              Delay: 3
-              Randomize: true
-      Dst:
-        Object: [ _boundary, _empty, grass, sand, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+      - Src:
+          Object: skeleton
+          Preconditions:
+            - eq: [ is_chasing, 0 ]
+          Commands:
+            - exec:
+                Action: skeleton_random_movement
+                Delay: 3
+                Randomize: true
+        Dst:
+          Object: [ _boundary, _empty, grass, sand, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: skeleton_chase_player
     InputMapping:
@@ -165,7 +256,7 @@ Actions:
                 Action: skeleton_chase_player
                 Delay: 3
                 Search:
-                  ImpassableObjects: [ water, stone, tree, coal, lava, iron, diamond, table, furnace ]
+                  ImpassableObjects: [ water, stone, plant, coal, lava, iron, diamond, table, furnace ]
                   TargetObjectName: player
         Dst:
           Object: player
@@ -189,7 +280,7 @@ Actions:
           Commands:
             - remove: true
         Dst:
-          Object: [ _boundary, _empty, cow, stone, tree, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, stone, plant, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: set_arrow_direction
     InputMapping:
@@ -200,7 +291,7 @@ Actions:
           Commands:
             - set_tile: meta.image_idx
         Dst:
-          Object: [ water, path, grass, sand  ]
+          Object: [ water, path, grass, sand ]
 
   - Name: fire_arrow
     InputMapping:
@@ -225,6 +316,7 @@ Actions:
           VectorToDest: [ -1, 0 ]
           MetaData:
             image_idx: 3
+      Internal: true
     Behaviours:
       - Src:
           Object: skeleton
@@ -237,7 +329,7 @@ Actions:
     InputMapping:
       Inputs:
         1:
-          VectorToDest: [0, 0]
+          VectorToDest: [ 0, 0 ]
       Internal: true
     Behaviours:
       - Src:
@@ -256,22 +348,22 @@ Actions:
       Internal: true
     Behaviours:
       - Src:
-#          Preconditions:
-#            - eq: [ src.reload_cooldown, 0 ]
+          #          Preconditions:
+          #            - eq: [ src.reload_cooldown, 0 ]
           Object: skeleton
           Commands:
             #- set: [ reload_cooldown, 1 ]
             - exec:
                 Action: fire_arrow
                 Randomize: true
-#            - exec:
-#                 Action: reload_arrow
-#                 Delay: 1
+        #            - exec:
+        #                 Action: reload_arrow
+        #                 Delay: 1
         Dst:
           Object: player
-###########################################################
+  ###########################################################
 
-##################### ZOMBIE MECHANICS ####################
+  ##################### ZOMBIE MECHANICS ####################
 
   - Name: zombie_random_movement
     InputMapping:
@@ -299,7 +391,7 @@ Actions:
                 Delay: 3
                 Randomize: true
         Dst:
-          Object: [ _boundary, _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: zombie_chase_player
     InputMapping:
@@ -318,7 +410,7 @@ Actions:
           Commands:
             - set: [ chase_cooldown, 0 ]
         Dst:
-          Object: [ _boundary, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: zombie_chase_proximity_trigger_off
     Trigger:
@@ -339,7 +431,7 @@ Actions:
                 Randomize: true
         Dst:
           Object: player
-#
+  #
   - Name: zombie_chase_proximity_trigger_on
     Trigger:
       Range: 8
@@ -349,22 +441,22 @@ Actions:
     Behaviours:
       - Src:
           Preconditions:
-           - eq: [src.chase_cooldown, 0]
+            - eq: [ src.chase_cooldown, 0 ]
           Object: zombie
           Commands:
             - set: [ is_chasing, 1 ]
             - set: [ chase_cooldown, 1 ]
-            - exec:
-                Action: zombie_chase_player
-                Delay: 2
-                Search:
-                  ImpassableObjects: [ water, stone, tree, coal, lava, iron, diamond, table, furnace ]
-                  TargetObjectName: player
+#            - exec:
+#                Action: zombie_chase_player
+#                Delay: 2
+#                Search:
+#                  ImpassableObjects: [ water, stone, plant, coal, lava, iron, diamond, table, furnace ]
+#                  TargetObjectName: player
         Dst:
           Object: player
-###########################################################
+  ###########################################################
 
-################### COW MECHANICS #########################
+  ################### COW MECHANICS #########################
 
   # Random walk for cows
   - Name: cow_random_movement
@@ -419,7 +511,28 @@ Actions:
                 Delay: 5
                 Randomize: true
         Dst:
-          Object: [ _boundary, _empty, cow, water, stone, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
+  ###########################################################
+
+  ################# Plant Mechanics #########################
+
+  - Name: plant_ripen
+    InputMapping:
+      Inputs:
+        1:
+          OrientationVector: [ 0, 0 ]
+          VectorToDest: [ 0, 0 ]
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: plant
+          Commands:
+            - set_tile: 1
+            - set: [ ripe, 1 ]
+        Dst:
+          Object: plant
+
 
 ###########################################################
 
@@ -463,11 +576,30 @@ Objects:
     Observers:
       Sprite2D:
         - Image: sprite2d/sand.png
+
   - Name: tree
+    Z: 1
     MapCharacter: T
     Observers:
       Sprite2D:
         - Image: sprite2d/tree.png
+
+
+  - Name: plant
+    MapCharacter: '+'
+    Z: 2
+    Variables:
+      - Name: ripe
+        InitialValue: 0
+    InitialActions:
+      - Action: plant_ripen
+        Delay: 30
+        ActionId: 1
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/plant.png
+        - Image: sprite2d/plant-ripe.png
+
   - Name: lava
     MapCharacter: L
     Observers:
@@ -508,10 +640,10 @@ Objects:
         Delay: 1
     Observers:
       Sprite2D:
-          - Image: sprite2d/arrow-up.png
-          - Image: sprite2d/arrow-right.png
-          - Image: sprite2d/arrow-down.png
-          - Image: sprite2d/arrow-left.png
+        - Image: sprite2d/arrow-up.png
+        - Image: sprite2d/arrow-right.png
+        - Image: sprite2d/arrow-down.png
+        - Image: sprite2d/arrow-left.png
 
   - Name: zombie
     Z: 2

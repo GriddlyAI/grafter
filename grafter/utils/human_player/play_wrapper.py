@@ -3,10 +3,14 @@ import pygame
 from grafter.wrapper import GrafterWrapper
 
 KEYWORD_TO_KEY = {
-    (ord("d"),): [0, 1],
+    (ord("a"),): [0, 1],
     (ord("w"),): [0, 2],
-    (ord("a"),): [0, 3],
+    (ord("d"),): [0, 3],
     (ord("s"),): [0, 4],
+    (ord('e'),): [1, 1], # do
+    (ord('r'),): [2, 1], # collect
+    (ord('f'),): [3, 1], # place
+    (ord('g'),): [4, 1], # make
 }
 
 from pygame.locals import VIDEORESIZE
@@ -33,7 +37,7 @@ class PlayWrapper(gym.Wrapper):
         screen.blit(pyg_img, (0, 0))
 
     def play(
-        self, transpose=True, fps=5, zoom=None, callback=None, keys_to_action=None
+        self, transpose=True, fps=5, zoom=None, callback=None, keys_to_action=KEYWORD_TO_KEY
     ):
         """Allows one to play the game using keyboard.
 
