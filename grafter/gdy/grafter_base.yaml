@@ -4,32 +4,162 @@ Environment:
   Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/.
   Observers:
     Sprite2D:
-      TileSize: [ 48, 48 ]
+      TileSize: 24
+      RotateAvatarImage: false
   Variables:
-    - Name: inventory_wood_sword
+
+    # ACHEIVEMENTS
+    - Name: ach_collect_coal
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_stone_sword
+    - Name: ach_collect_diamond
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_iron_sword
+    - Name: ach_collect_drink
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_wood_pickaxe
+    - Name: ach_collect_iron
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_stone_pickaxe
+    - Name: ach_collect_sapling
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_iron_pickaxe
+    - Name: ach_collect_stone
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_food
+    - Name: ach_collect_wood
       InitialValue: 0
       PerPlayer: true
-    - Name: inventory_sapling
-      InitialValue: 3
+    - Name: ach_defeat_skeleton
+      InitialValue: 0
       PerPlayer: true
+    - Name: ach_defeat_zombie
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_eat_cow
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_eat_plant
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_make_iron_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_make_iron_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_make_stone_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_make_stone_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_make_wood_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_make_wood_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_place_furnace
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_place_plant
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_place_stone
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_place_table
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_wake_up
+      InitialValue: 0
+      PerPlayer: true
+
+    # INVENTORY
+    - Name: inv_wood_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_stone_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_iron_sword
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_wood_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_stone_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_iron_pickaxe
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_fence
+      InitialValue: 0
+      PerPlayer: true
+
+    - Name: inv_sapling
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_stone
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_coal
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_iron
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_diamond
+      InitialValue: 0
+      PerPlayer: true
+    - Name: inv_wood
+      InitialValue: 0
+      PerPlayer: true
+
+    # Player faculties
+    - Name: inv_food
+      InitialValue: 9
+      PerPlayer: true
+    - Name: inv_drink
+      InitialValue: 9
+      PerPlayer: true
+    - Name: inv_energy
+      InitialValue: 9
+      PerPlayer: true
+    - Name: health
+      InitialValue: 9
+      PerPlayer: true
+
+    # Misc
+    - Name: near_table
+      InitialValue: 0
+      PerPlayer: true
+    - Name: near_furnace
+      InitialValue: 0
+      PerPlayer: true
+    - Name: damage
+      InitialValue: 1
+      PerPlayer: true
+    - Name: is_sleeping
+      InitialValue: 0
+      PerPlayer: true
+
+    # Player stats
+    - Name: fatigue
+      InitialValue: 0
+      PerPlayer: true
+    - Name: recover
+      InitialValue: 0
+      PerPlayer: true
+    - Name: hunger
+      InitialValue: 0
+      PerPlayer: true
+    - Name: thirst
+      InitialValue: 0
+      PerPlayer: true
+
   Player:
     Count: 1
     AvatarObject: player
@@ -37,36 +167,199 @@ Environment:
       HighlightPlayers: false
       TrackAvatar: true
       RotateWithAvatar: false
-      RotateAvatarImage: false
       Height: 9
       Width: 9
 
   Levels:
     - |
-      .
+      G   G   G   G   G   G   G    G   G   G   G   G   G   G   G   G   S   S   W   W   W   W   W   W   W   W   G   W   W   W   
+      G   G   G   G   G   T   T    G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   W   
+      G   G   T   G   T   G   G    #/G G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   
+      S   G   G   G   G   T   T    G   G   G   G   G   G   G   G   G   G   G   G   W   G   W   W   T   W   W   W   W   W   W   
+      S   G   G   T   T   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   W   G   G   W   W   W   W   W   W   W   
+      G   G   T   G   G   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   
+      W   #/G G   G   G   G   G    G   G   G   G   G   s   s   s   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   
+      W   W   G   G   G   G   G    G   G   G   G   G   P   s   s   s   s   G   G   G   W   W   W   W   W   W   W   W   W   W   
+      W   W   G   G   G   G   G    G   G   G   G   G   P   G   s   G   G   G   G   G   W   W   W   W   W   W   W   W   G   W   
+      G   W   G   G   G   G   G    G   G   G   G   s   P   s   s   G   T   T   G   G   W   W   G   W   W   W   W   W   G   W   
+      W   G   G   G   G   G   G    G   G   G   G   s   G   s   G   T   G   G   G   T   G   W   W   W   W   G   W   G   W   W   
+      W   W   G   G   G   G   G    G   G   G   T   s   P   G   G   G   G   G   T   G   T   W   G   W   W   W   T   W   W   W   
+      W   W   G   G   G   G   p1/G G   G   G   s   G   P   G   G   T   G   T   T   G   W   W   W   G   W   W   G   W   W   W   
+      W   W   G   G   G   G   G    G   G   G   G   G   P   G   G   G   G   G   G   G   W   W   W   W   W   W   G   W   W   W   
+      W   G   G   G   G   G   G    T   G   G   G   G   G   G   G   T   G   G   G   S   S   W   W   W   W   W   W   W   W   W   
+      W   G   G   G   G   G   G    G   G   G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   G   S   
+      S   S   G   G   G   G   #/G  G   G   G   G   G   G   G   G   T   G   T   G   S   S   G   W   W   W   W   W   W   S   G   
+      S   S   G   G   T   G   T    G   G   G   G   G   G   G   G   G   G   G   G   G   S   W   W   S   W   W   W   S   G   G   
+      S   S   T   T   G   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   S   S   S   G   G   G   G   
+      S   G   G   G   T   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   G   S   S   G   G   G   
+      T   G   #/G G   #/G G   G    T   T   G   G   G   G   G   G   G   #/G G   G   G   G   #/G G   G   G   G   S   G   G   G   
+      S   G   T   G   G   T   G    G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   !/S G   G   T   T   
+      S   T   G   G   T   T   G    T   T   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   T   G   
+      #/G G   G   G   G   T   G    G   G   #/G G   G   G   G   G   G   T   G   G   G   G   G   G   G   T   T   G   G   G   G   
+      S   G   G   G   G   G   G    G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   T   G   G   
+      G   G   G   G   G   G   G    G   G   G   T   G   G   G   T   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   
+      W   S   G   G   G   G   G    G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   T   G   G   G   T   S   
+      W   S   G   T   G   G   T    G   T   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   S   S   S   
+      W   W   G   G   T   G   G    G   G   T   G   G   G   G   G   G   G   G   !/G G   G   G   G   G   S   S   W   W   W   W   
+      W   W   S   G   G   G   G    G   G   G   G   T   T   G   G   G   G   G   G   G   G   T   S   S   S   W   W   W   G   W
 
 Actions:
+
+
+  - Name: update_player_stats
+    InputMapping:
+      Internal: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, 0 ]
+    Behaviours:
+
+      # Just repear this action every time step
+      - Src:
+          Object: player
+        Dst:
+          Object: player
+          Commands:
+            - exec:
+                Action: update_player_stats
+                ActionId: 1
+                Delay: 1
+
+      # handle fatigue
+      - Src:
+          Object: player
+        Dst:
+          Object: player
+          Commands:
+            - if:
+                Conditions:
+                  eq: [ is_sleeping, 1 ]
+                OnTrue:
+                  - sub: [ fatigue, 1 ]
+                OnFalse:
+                  - add: [ fatigue, 1 ]
+            - if:
+                Conditions:
+                  lt: [ fatigue, -10 ]
+                OnTrue:
+                  - set: [ fatigue, 0 ]
+                  - add: [ inv_energy, 1 ]
+            - if:
+                Conditions:
+                  gt: [ fatigue, 30 ]
+                OnTrue:
+                  - set: [ fatigue, 0 ]
+                  - sub: [ inv_energy, 1 ]
+      # handle hunger
+      - Src:
+          Object: player
+        Dst:
+          Object: player
+          Commands:
+            - if:
+                Conditions:
+                  eq: [ is_sleeping, 1 ]
+                OnTrue:
+                  - add: [ hunger, 1 ]
+                OnFalse:
+                  - add: [ hunger, 2 ]
+            - if:
+                Conditions:
+                  gt: [ hunger, 50 ]
+                OnTrue:
+                  - set: [ hunger, 0 ]
+                  - sub: [ inv_food, 1 ]
+
+
+      # handle thirst
+      - Src:
+          Object: player
+        Dst:
+          Object: player
+          Commands:
+            - if:
+                Conditions:
+                  eq: [ is_sleeping, 1 ]
+                OnTrue:
+                  - add: [ thirst, 1 ]
+                OnFalse:
+                  - add: [ thirst, 2 ]
+            - if:
+                Conditions:
+                  gt: [ thirst, 30 ]
+                OnTrue:
+                  - set: [ thirst, 0 ]
+                  - sub: [ inv_drink, 1 ]
+
+
+      # handle health recovery
+      - Src:
+          Object: player
+        Dst:
+          Object: player
+          Commands:
+            - if:
+                Conditions:
+                  and:
+                    - gt: [ inv_food, 0 ]
+                    - gt: [ inv_drink, 0 ]
+                    - or:
+                        - gt: [ inv_energy, 0 ]
+                        - eq: [ is_sleeping, 1 ]
+                OnTrue:
+                  - if:
+                      Conditions:
+                        eq: [ is_sleeping, 1 ]
+                      OnTrue:
+                        - add: [ recover, 4 ]
+                      OnFalse:
+                        - add: [ recover, 2 ]
+                OnFalse:
+                  - if:
+                      Conditions:
+                        eq: [ is_sleeping, 1 ]
+                      OnTrue:
+                        - sub: [ recover, 1 ]
+                      OnFalse:
+                        - sub: [ recover, 2 ]
+            - if:
+                Conditions:
+                  gt: [ recover, 50 ]
+                OnTrue:
+                  - set: [ recover, 0 ]
+                  - add: [ health, 1 ]
+            - if:
+                Conditions:
+                  lt: [ recover, -30 ]
+                OnTrue:
+                  - set: [ recover, 0 ]
+                  - sub: [ health, 1 ]
+
   - Name: move
     InputMapping:
       Inputs:
         1:
           OrientationVector: [ -1, 0 ]
           VectorToDest: [ -1, 0 ]
+          Description: "Move Left"
           MetaData:
             image_idx: 1
         2:
           OrientationVector: [ 0, -1 ]
           VectorToDest: [ 0, -1 ]
+          Description: "Move Up"
           MetaData:
             image_idx: 2
         3:
           OrientationVector: [ 1, 0 ]
           VectorToDest: [ 1, 0 ]
+          Description: "Move Right"
           MetaData:
             image_idx: 3
         4:
           OrientationVector: [ 0, 1 ]
           VectorToDest: [ 0, 1 ]
+          Description: "Move Down"
           MetaData:
             image_idx: 4
     Behaviours:
@@ -84,7 +377,8 @@ Actions:
             - rot: _dir
             - set_tile: meta.image_idx
         Dst:
-          Object: [ cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ cow, water, stone, plant, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
 
   - Name: do
     InputMapping:
@@ -92,6 +386,7 @@ Actions:
       Inputs:
         1:
           VectorToDest: [ 0, -1 ]
+          Description: "Interact with an object"
     Behaviours:
       # Player eats a (ripe) plant
       - Src:
@@ -99,7 +394,7 @@ Actions:
             - eq: [ dst.ripe, 1 ]
           Object: player
           Commands:
-            - add: [ inventory_food, 4 ]
+            - add: [ inv_food, 4 ]
         Dst:
           Object: plant
           Commands:
@@ -110,44 +405,512 @@ Actions:
                 Delay: 30
                 ActionId: 1
 
+      # Player collects a fence
+      - Src:
+          Object: player
+          Commands:
+            - add: [ inv_fence, 1 ]
+        Dst:
+          Object: fence
+          Commands:
+            - remove: true
+
+      # Player attacks a zombie
+      - Src:
+          Object: player
+        Dst:
+          Object: zombie
+          Commands:
+            - sub: [ dst.health, src.damage ]
+            - if:
+                Conditions:
+                  lte: [ dst.health, 0 ]
+                OnTrue:
+                  - remove: true
+
+      # Player attacks a skeleton
+      - Src:
+          Object: player
+        Dst:
+          Object: skeleton
+          Commands:
+            - sub: [ dst.health, src.damage ]
+            - if:
+                Conditions:
+                  lte: [ dst.health, 0 ]
+                OnTrue:
+                  - remove: true
+
+      # Player attacks a cow
+      - Src:
+          Object: player
+        Dst:
+          Object: cow
+          Commands:
+            - sub: [ dst.health, src.damage ]
+            - if:
+                Conditions:
+                  lte: [ dst.health, 0 ]
+                OnTrue:
+                  - remove: true
+                  - add: [ src.inv_food, 6 ]
+
+
+  #   tree: {require: {}, receive: {wood: 1}, leaves: grass}
+  #   stone: {require: {wood_pickaxe: 1}, receive: {stone: 1}, leaves: path}
+  #   coal: {require: {wood_pickaxe: 1}, receive: {coal: 1}, leaves: path}
+  #   iron: {require: {stone_pickaxe: 1}, receive: {iron: 1}, leaves: path}
+  #   diamond: {require: {iron_pickaxe: 1}, receive: {diamond: 1}, leaves: path}
+  #   water: {require: {}, receive: {drink: 1}, leaves: water}
+  #   grass: {require: {}, receive: {sapling: 1}, probability: 0.1, leaves: grass}
   - Name: collect
     InputMapping:
       Relative: true
       Inputs:
         1:
           VectorToDest: [ 0, -1 ]
+          Description: "Collect wood from a tree"
+          MetaData:
+            action_id: 1
+        2:
+          VectorToDest: [ 0, -1 ]
+          Description: "Collect stone"
+          MetaData:
+            action_id: 2
+        3:
+          VectorToDest: [ 0, -1 ]
+          Description: "Collect coal"
+          MetaData:
+            action_id: 3
+        4:
+          VectorToDest: [ 0, -1 ]
+          Description: "Collect iron"
+          MetaData:
+            action_id: 4
+        5:
+          VectorToDest: [ 0, -1 ]
+          Description: "Collect diamond"
+          MetaData:
+            action_id: 5
+        6:
+          VectorToDest: [ 0, -1 ]
+          Description: "Collect water"
+          MetaData:
+            action_id: 6
+        7:
+          VectorToDest: [ 0, -1 ]
+          Description: "Collect saplings"
+          MetaData:
+            action_id: 7
+
     Behaviours:
+      # Player collects wood from a tree
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - lt: [ inv_wood, 9 ]
+                - eq: [ meta.action_id, 1 ]
+          Commands:
+            - add: [ inv_wood, 1 ]
+        Dst:
+          Object: tree
+          Commands:
+            - remove: true
+            - spawn: grass
+
+      # Player collects stone
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ inv_wood_pickaxe, 1 ]
+                - lt: [ inv_stone, 9 ]
+                - eq: [ meta.action_id, 2 ]
+          Commands:
+            - add: [ inv_stone, 1 ]
+        Dst:
+          Object: stone
+          Commands:
+            - remove: true
+            - spawn: path
+
+      # Player collects coal
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ inv_wood_pickaxe, 1 ]
+                - lt: [ inv_coal, 9 ]
+                - eq: [ meta.action_id, 3 ]
+          Commands:
+            - add: [ inv_coal, 1 ]
+        Dst:
+          Object: coal
+          Commands:
+            - remove: true
+            - spawn: path
+
+      # Player collects iron
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ inv_stone_pickaxe, 1 ]
+                - lt: [ inv_iron, 9 ]
+                - eq: [ meta.action_id, 4 ]
+          Commands:
+            - add: [ inv_iron, 1 ]
+        Dst:
+          Object: iron
+          Commands:
+            - remove: true
+            - spawn: path
+
+      # Player collects diamond
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ inv_iron_pickaxe, 1 ]
+                - lt: [ inv_diamond, 9 ]
+                - eq: [ meta.action_id, 5 ]
+          Commands:
+            - add: [ inv_diamond, 1 ]
+        Dst:
+          Object: diamond
+          Commands:
+            - remove: true
+            - spawn: path
+
+      # Player collects water
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - lt: [ inv_drink, 9 ]
+                - eq: [ meta.action_id, 6 ]
+          Commands:
+            - add: [ inv_drink, 1 ]
+        Dst:
+          Object: water
+
+
       # Player collects a sapling
       - Src:
           Object: player
           Preconditions:
-            - lt: [ inventory_sapling, 9 ]
+            - and:
+                - eq: [ meta.action_id, 7 ]
+                - lt: [ inv_sapling, 9 ]
           Commands:
-            - add: [ inventory_sapling, 1 ]
+            - add: [ inv_sapling, 1 ]
         Dst:
           Object: grass
-        # Probability: 0.1 https://github.com/Bam4d/Griddly/issues/179
+        Probability: 0.1
 
+
+  #   stone: {uses: {stone: 1}, where: [grass, sand, path, water, lava], type: material}
+  #   table: {uses: {wood: 2}, where: [grass, sand, path], type: material}
+  #   furnace: {uses: {stone: 4}, where: [grass, sand, path], type: material}
+  #   plant: {uses: {sapling: 1}, where: [grass], type: object}
   - Name: place
     InputMapping:
       Relative: true
       Inputs:
         1:
           VectorToDest: [ 0, -1 ]
+          Description: "Place a stone"
+          MetaData:
+            action_id: 1
+        2:
+          VectorToDest: [ 0, -1 ]
+          Description: "Place a table"
+          MetaData:
+            action_id: 2
+        3:
+          VectorToDest: [ 0, -1 ]
+          Description: "Place a furnace"
+          MetaData:
+            action_id: 3
+        4:
+          VectorToDest: [ 0, -1 ]
+          Description: "Place a plant"
+          MetaData:
+            action_id: 4
     Behaviours:
+      # Player places a stone
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 1 ]
+                - gte: [ inv_stone, 1 ]
+
+          Commands:
+            - sub: [ inv_stone, 1 ]
+        Dst:
+          Object: [ grass, sand, path, water, lava ]
+          Commands:
+            - spawn: stone
+
+      # Player places a table
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 2 ]
+                - gte: [ inv_wood, 2 ]
+
+          Commands:
+            - sub: [ inv_wood, 2 ]
+        Dst:
+          Object: [ grass, sand, path ]
+          Commands:
+            - spawn: table
+
+      # Player places a furnace
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 3 ]
+                - gte: [ inv_stone, 4 ]
+
+          Commands:
+            - sub: [ inv_stone, 4 ]
+        Dst:
+          Object: [ grass, sand, path ]
+          Commands:
+            - spawn: furnace
+
       # Player places a plant
       - Src:
           Object: player
           Preconditions:
-            - gte: [ inventory_sapling, 1 ]
+            - and:
+                - eq: [ meta.action_id, 4 ]
+                - gte: [ inv_sapling, 1 ]
+
           Commands:
-            - decr: inventory_sapling
+            - decr: inv_sapling
         Dst:
           Object: grass
           Commands:
             - spawn: plant
 
-  #- Name: make
+  - Name: make
+    InputMapping:
+      Relative: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, 0 ]
+          Description: "Make a wood pickaxe"
+          MetaData:
+            action_id: 1
+        2:
+          VectorToDest: [ 0, 0 ]
+          Description: "Make a stone pickaxe"
+          MetaData:
+            action_id: 2
+        3:
+          VectorToDest: [ 0, 0 ]
+          Description: "Make an iron pickaxe"
+          MetaData:
+            action_id: 3
+        4:
+          VectorToDest: [ 0, 0 ]
+          Description: "Make a wood sword"
+          MetaData:
+            action_id: 4
+        5:
+          VectorToDest: [ 0, 0 ]
+          Description: "Make a stone sword"
+          MetaData:
+            action_id: 5
+        6:
+          VectorToDest: [ 0, 0 ]
+          Description: "Make an iron sword"
+          MetaData:
+            action_id: 6
+    Behaviours:
+      # Player makes a wood pickaxe
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 1 ]
+                - gte: [ inv_wood, 1 ]
+                - lt: [ inv_wood_pickaxe, 1 ]
+          Commands:
+            - decr: inv_wood
+        Dst:
+          Object: player
+          Commands:
+            - set: [ inv_wood_pickaxe, 1 ]
+
+      # Player makes a stone pickaxe
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 2 ]
+                - gte: [ inv_wood, 1 ]
+                - gte: [ inv_stone, 1 ]
+                - eq: [ near_table, 1 ]
+                - lt: [ inv_stone_pickaxe, 1 ]
+          Commands:
+            - decr: inv_stone
+            - decr: inv_wood
+        Dst:
+          Object: player
+          Commands:
+            - set: [ inv_stone_pickaxe, 1 ]
+
+      # Player makes an iron pickaxe
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 3 ]
+                - gte: [ inv_wood, 1 ]
+                - gte: [ inv_iron, 1 ]
+                - gte: [ inv_coal, 1 ]
+                - eq: [ near_furnace, 1 ]
+                - eq: [ near_table, 1 ]
+                - lt: [ inv_iron_pickaxe, 1 ]
+          Commands:
+            - decr: inv_coal
+            - decr: inv_wood
+            - decr: inv_iron
+        Dst:
+          Object: player
+          Commands:
+            - set: [ inv_iron_pickaxe, 1 ]
+
+      # Player makes a wood sword
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 4 ]
+                - gte: [ inv_wood, 1 ]
+                - lt: [ inv_wood_sword, 1 ]
+          Commands:
+            - decr: inv_wood
+        Dst:
+          Object: player
+          Commands:
+            - set: [ inv_wood_sword, 1 ]
+            - set: [ damage, 2 ]
+
+      # Player makes a stone sword
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 5 ]
+                - gte: [ inv_wood, 1 ]
+                - gte: [ inv_stone, 1 ]
+                - eq: [ near_table, 1 ]
+                - lt: [ inv_stone_sword, 1 ]
+          Commands:
+            - decr: inv_stone
+            - decr: inv_wood
+        Dst:
+          Object: player
+          Commands:
+            - set: [ inv_stone_sword, 1 ]
+            - set: [ damage, 3 ]
+
+      # Player makes an iron sword
+      - Src:
+          Object: player
+          Preconditions:
+            - and:
+                - eq: [ meta.action_id, 6 ]
+                - gte: [ inv_wood, 1 ]
+                - gte: [ inv_iron, 1 ]
+                - gte: [ inv_coal, 1 ]
+                - eq: [ near_furnace, 1 ]
+                - eq: [ near_table, 1 ]
+                - lt: [ inv_iron_sword, 1 ]
+          Commands:
+            - decr: inv_coal
+            - decr: inv_wood
+            - decr: inv_iron
+        Dst:
+          Object: player
+          Commands:
+            - set: [ inv_iron_sword, 1 ]
+            - set: [ damage, 5 ]
+
+  ################# TABLE AND FURNACE #######################
+
+  - Name: near_table_on
+    Trigger:
+      Type: RANGE_BOX_AREA
+      Range: 1
+    Behaviours:
+      - Src:
+          Object: table
+        Dst:
+          Object: player
+          Commands:
+            - set: [ near_table, 1 ]
+
+  - Name: near_table_off
+    Trigger:
+      Type: RANGE_BOX_BOUNDARY
+      Range: 2
+    Behaviours:
+      - Src:
+          Object: table
+        Dst:
+          Object: player
+          Commands:
+            - set: [ near_table, 0 ]
+
+  - Name: near_furnace_on
+    Trigger:
+      Type: RANGE_BOX_AREA
+      Range: 1
+    Behaviours:
+      - Src:
+          Object: furnace
+        Dst:
+          Object: player
+          Commands:
+            - set: [ near_furnace, 1 ]
+
+  - Name: near_furnace_off
+    Trigger:
+      Type: RANGE_BOX_BOUNDARY
+      Range: 2
+    Behaviours:
+      - Src:
+          Object: furnace
+        Dst:
+          Object: player
+          Commands:
+            - set: [ near_furnace, 0 ]
+
+
+  ##################### ATTACK COOLDOWN #####################
+
+  - Name: act_attack_cooldown
+    InputMapping:
+      Inputs:
+        1:
+          VectorToDest: [ 0, 0 ]
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: zombie
+          Commands:
+            - set: [ attack_cooldown, 0 ]
+        Dst:
+          Object: zombie
 
 
   ################# SKELETON MECHANICS ######################
@@ -410,7 +1173,31 @@ Actions:
           Commands:
             - set: [ chase_cooldown, 0 ]
         Dst:
-          Object: [ _boundary, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, cow, water, stone, plant, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+
+      # Zombie attacks player
+      - Src:
+          Object: zombie
+          Preconditions:
+            eq: [ attack_cooldown, 0 ]
+          Commands:
+            - set: [ chase_cooldown, 0 ]
+            - set: [ attack_cooldown, 1 ]
+            - exec:
+                Action: act_attack_cooldown
+                Delay: 5
+                ActionId: 1
+        Dst:
+          Object: player
+          Commands:
+            - if:
+                Conditions:
+                  eq: [ is_sleeping, 1 ]
+                OnTrue:
+                  - sub: [ health, 7 ]
+                OnFalse:
+                  - sub: [ health, 2 ]
+
 
   - Name: zombie_chase_proximity_trigger_off
     Trigger:
@@ -446,12 +1233,12 @@ Actions:
           Commands:
             - set: [ is_chasing, 1 ]
             - set: [ chase_cooldown, 1 ]
-#            - exec:
-#                Action: zombie_chase_player
-#                Delay: 2
-#                Search:
-#                  ImpassableObjects: [ water, stone, plant, coal, lava, iron, diamond, table, furnace ]
-#                  TargetObjectName: player
+            - exec:
+                Action: zombie_chase_player
+                Delay: 2
+                Search:
+                  ImpassableObjects: [ water, stone, tree, zombie, plant, coal, lava, iron, diamond, table, furnace ]
+                  TargetObjectName: player
         Dst:
           Object: player
   ###########################################################
@@ -511,7 +1298,7 @@ Actions:
                 Delay: 5
                 Randomize: true
         Dst:
-          Object: [ _boundary, _empty, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, water, stone, tree, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   ###########################################################
 
@@ -539,6 +1326,10 @@ Actions:
 Objects:
   - Name: player
     MapCharacter: p
+    InitialActions:
+      - Action: update_player_stats
+        Delay: 1
+        ActionId: 1
     Z: 2
     Observers:
       Sprite2D:
@@ -550,6 +1341,7 @@ Objects:
         - Image: sprite2d/player-sleep.png
   - Name: water
     MapCharacter: W
+    Z: 1
     Observers:
       Sprite2D:
         - Image: sprite2d/water.png
@@ -602,34 +1394,47 @@ Objects:
 
   - Name: lava
     MapCharacter: L
+    Z: 1
     Observers:
       Sprite2D:
         - Image: sprite2d/lava.png
   - Name: coal
     MapCharacter: c
+    Z: 2
     Observers:
       Sprite2D:
         - Image: sprite2d/coal.png
   - Name: iron
     MapCharacter: i
+    Z: 2
     Observers:
       Sprite2D:
         - Image: sprite2d/iron.png
   - Name: diamond
     MapCharacter: d
+    Z: 2
     Observers:
       Sprite2D:
         - Image: sprite2d/diamond.png
   - Name: table
     MapCharacter: t
+    Z: 2
     Observers:
       Sprite2D:
         - Image: sprite2d/table.png
   - Name: furnace
     MapCharacter: f
+    Z: 2
     Observers:
       Sprite2D:
         - Image: sprite2d/furnace.png
+
+  - Name: fence
+    MapCharacter: "}"
+    Z: 2
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/fence.png
 
   - Name: arrow
     Z: 2
@@ -656,6 +1461,8 @@ Objects:
       - Name: is_chasing
         InitialValue: 0
       - Name: chase_cooldown
+        InitialValue: 0
+      - Name: attack_cooldown
         InitialValue: 0
     MapCharacter: '!'
     Observers:
@@ -685,6 +1492,9 @@ Objects:
     InitialActions:
       - Action: cow_random_movement
         Randomize: true
+    Variables:
+      - Name: health
+        InitialValue: 3
     Z: 2
     MapCharacter: '#'
     Observers:
