@@ -4,8 +4,11 @@ Environment:
   Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/.
   Observers:
     Sprite2D:
-      TileSize: 24
+      TileSize: 20
       RotateAvatarImage: false
+  Termination:
+    End:
+      - eq: [player_count, 0]
   Variables:
 
     # ACHEIVEMENTS
@@ -34,6 +37,9 @@ Environment:
       InitialValue: 0
       PerPlayer: true
     - Name: ach_defeat_zombie
+      InitialValue: 0
+      PerPlayer: true
+    - Name: ach_defeat_player
       InitialValue: 0
       PerPlayer: true
     - Name: ach_eat_cow
@@ -75,6 +81,7 @@ Environment:
     - Name: ach_wake_up
       InitialValue: 0
       PerPlayer: true
+
 
     # INVENTORY
     - Name: inv_wood_sword
@@ -129,7 +136,7 @@ Environment:
       InitialValue: 9
       PerPlayer: true
     - Name: health
-      InitialValue: 9
+      InitialValue: 900
       PerPlayer: true
 
     # Misc
@@ -160,8 +167,15 @@ Environment:
       InitialValue: 0
       PerPlayer: true
 
+    # So the engine knows when a player is dead
+    - Name: player_done
+      InitialValue: 0
+      PerPlayer: true
+    - Name: player_count
+      InitialValue: 0
+
   Player:
-    Count: 1
+    Count: 8
     AvatarObject: player
     Observer:
       HighlightPlayers: false
@@ -172,38 +186,74 @@ Environment:
 
   Levels:
     - |
-      G   G   G   G   G   G   G    G   G   G   G   G   G   G   G   G   S   S   W   W   W   W   W   W   W   W   G   W   W   W   
-      G   G   G   G   G   T   T    G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   W   
-      G   G   T   G   T   G   G    #/G G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   
-      S   G   G   G   G   T   T    G   G   G   G   G   G   G   G   G   G   G   G   W   G   W   W   T   W   W   W   W   W   W   
-      S   G   G   T   T   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   W   G   G   W   W   W   W   W   W   W   
-      G   G   T   G   G   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   
-      W   #/G G   G   G   G   G    G   G   G   G   G   s   s   s   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   
-      W   W   G   G   G   G   G    G   G   G   G   G   P   s   s   s   s   G   G   G   W   W   W   W   W   W   W   W   W   W   
-      W   W   G   G   G   G   G    G   G   G   G   G   P   G   s   G   G   G   G   G   W   W   W   W   W   W   W   W   G   W   
-      G   W   G   G   G   G   G    G   G   G   G   s   P   s   s   G   T   T   G   G   W   W   G   W   W   W   W   W   G   W   
-      W   G   G   G   G   G   G    G   G   G   G   s   G   s   G   T   G   G   G   T   G   W   W   W   W   G   W   G   W   W   
-      W   W   G   G   G   G   G    G   G   G   T   s   P   G   G   G   G   G   T   G   T   W   G   W   W   W   T   W   W   W   
-      W   W   G   G   G   G   p1/G G   G   G   s   G   P   G   G   T   G   T   T   G   W   W   W   G   W   W   G   W   W   W   
-      W   W   G   G   G   G   G    G   G   G   G   G   P   G   G   G   G   G   G   G   W   W   W   W   W   W   G   W   W   W   
-      W   G   G   G   G   G   G    T   G   G   G   G   G   G   G   T   G   G   G   S   S   W   W   W   W   W   W   W   W   W   
-      W   G   G   G   G   G   G    G   G   G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   G   S   
-      S   S   G   G   G   G   #/G  G   G   G   G   G   G   G   G   T   G   T   G   S   S   G   W   W   W   W   W   W   S   G   
-      S   S   G   G   T   G   T    G   G   G   G   G   G   G   G   G   G   G   G   G   S   W   W   S   W   W   W   S   G   G   
-      S   S   T   T   G   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   S   S   S   G   G   G   G   
-      S   G   G   G   T   G   G    G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   G   S   S   G   G   G   
-      T   G   #/G G   #/G G   G    T   T   G   G   G   G   G   G   G   #/G G   G   G   G   #/G G   G   G   G   S   G   G   G   
-      S   G   T   G   G   T   G    G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   !/S G   G   T   T   
-      S   T   G   G   T   T   G    T   T   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   T   G   
-      #/G G   G   G   G   T   G    G   G   #/G G   G   G   G   G   G   T   G   G   G   G   G   G   G   T   T   G   G   G   G   
-      S   G   G   G   G   G   G    G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   T   G   G   
-      G   G   G   G   G   G   G    G   G   G   T   G   G   G   T   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   
-      W   S   G   G   G   G   G    G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   T   G   G   G   T   S   
-      W   S   G   T   G   G   T    G   T   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   S   S   S   
-      W   W   G   G   T   G   G    G   G   T   G   G   G   G   G   G   G   G   !/G G   G   G   G   G   S   S   W   W   W   W   
-      W   W   S   G   G   G   G    G   G   G   G   T   T   G   G   G   G   G   G   G   G   T   S   S   S   W   W   W   G   W
+      G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   T   s   s   s   s   s   G   T   G   T   G   G   
+      G   G   G   G   G   T   G   T   G   G   #/G G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   W   G   G   T   G   G   G   G   G   
+      G   G   G   G   T   G   G   T   T   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   W   W   W   W   W   W   W   W   W   W   S   G   G   G   G   G   
+      S   G   G   T   G   T   G   G   G   G   G   G   G   G   G   !/G G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   S   S   G   S   S   
+      S   G   !/G T   G   G   G   G   G   G   G   G   G   G   !/G G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   S   S   S   S   
+      W   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   W   W   W   W   S   S   
+      W   G   G   G   G   G   G   G   G   G   G   G   s   s   s   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   G   W   W   W   W   W   W   W   W   W   W   W   W   S   S   
+      W   W   G   G   G   G   G   G   G   G   G   s   P   s   s   s   s   G   G   G   W   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   S   S   
+      W   W   G   G   G   G   G   G   G   G   G   s   G   s   s   G   G   T   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   T   T   G   G   G   W   W   W   W   W   W   W   W   W   S   S   
+      W   W   G   G   G   G   !/G G   G   G   G   s   P   s   s   T   G   G   G   G   W   W   W   W   W   W   W   W   W   W   G   G   W   G   T   G   G   G   G   G   W   W   W   W   W   W   W   S   S   S   
+      W   W   G   G   G   G   G   G   G   G   G   G   P   s   T   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   T   G   G   T   G   G   G   G   G   G   W   W   S   S   S   S   S   G   
+      W   W   G   G   G   G   G   G   G   G   s   s   P   s   G   G   T   G   G   G   W   W   W   W   W   W   W   W   W   G   W   T   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   T   
+      W   W   G   G   G   G   G   G   G   G   c   s   P   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   #/G 
+      W   W   !/G G   G   G   G   T   G   G   G   s   P   T   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   T   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   T   G   
+      G   G   G   G   G   G   T   G   T   G   G   G   P   T   G   #/G G   G   G   S   W   W   W   W   W   W   W   W   W   W   G   T   G   G   !/G G   T   T   G   G   G   G   G   G   G   G   G   G   G   G   
+      W   S   G   G   G   G   T   G   G   #/G G   G   G   G   G   G   T   G   G   S   W   S   W   W   W   W   W   W   W   S   G   G   G   G   G   G   G   G   G   T   G   !/G G   G   G   G   G   G   G   G   
+      S   S   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   T   S   S   W   G   W   W   W   W   W   S   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
+      S   S   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   S   G   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
+      S   S   G   G   T   G   T   G   G   G   G   G   G   G   G   G   G   T   G   G   G   S   S   S   S   S   S   S   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   #/G G   !/G G   G   G   G   G   
+      G   S   G   T   G   G   G   #/G T   G   G   G   G   G   G   T   G   G   G   G   G   G   G   S   S   S   S   !/G G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   T   G   G   
+      S   S   G   G   G   T   G   G   T   #/G G   G   G   G   G   G   G   G   T   G   G   G   G   G   S   S   S   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   T   G   G   G   G   T   G   S   
+      S   G   G   G   T   T   G   G   G   G   G   G   G   T   T   G   T   G   G   G   G   G   G   #/G G   G   S   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   S   W   
+      S   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   G   G   T   G   T   T   G   G   G   G   T   G   p2/GG   G   G   G   G   G   G   S   W   W   W   
+      G   T   T   T   G   G   G   G   G   T   #/G G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   
+      S   T   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   p1/GG   W   W   W   W   W   W   W   
+      S   T   T   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   
+      W   G   G   G   G   G   G   T   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   G   T   S   G   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   
+      W   S   G   T   G   G   G   G   G   G   G   T   T   G   #/G G   G   G   G   G   #/G G   G   G   G   G   S   S   S   S   S   S   G   T   G   G   S   S   S   G   G   G   G   W   W   W   W   W   W   W   
+      W   W   S   G   G   G   G   G   G   #/G G   G   G   T   G   G   G   G   G   G   G   G   T   T   S   S   W   W   W   W   S   S   S   G   G   S   S   S   S   G   G   G   G   G   W   W   W   W   W   W   
+      W   W   S   G   T   G   G   G   G   G   G   G   G   #/G G   G   G   !/G G   G   G   G   S   S   G   W   W   W   W   W   S   S   S   S   S   S   S   S   S   G   G   G   G   G   G   W   W   G   W   W   
+      W   W   S   T   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   S   S   S   S   W   W   W   W   W   W   W   S   S   S   G   G   S   S   S   G   G   G   G   T   G   G   S   W   W   W   W   
+      W   S   S   T   G   G   G   G   G   G   G   G   G   T   T   T   G   W   S   W   W   W   W   G   W   W   W   W   W   S   S   S   G   G   G   G   G   G   G   T   G   G   G   G   G   G   S   W   W   W   
+      W   G   S   G   G   G   G   G   G   G   T   G   G   T   G   W   G   W   W   W   W   W   W   W   W   W   G   W   W   W   S   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   S   S   
+      W   S   S   G   G   G   G   G   G   G   G   G   T   T   W   W   W   W   W   W   G   W   W   W   W   G   W   W   W   G   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   
+      S   S   T   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   G   G   G   G   G   G   G   G   T   T   G   G   G   G   G   G   G   
+      G   G   G   G   G   G   G   G   !/G G   S   T   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
+      P   G   G   G   G   G   G   G   G   S   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   P   P   P   P   G   G   G   G   G   G   G   G   G   G   !/G G   G   G   G   
+      s   G   #/G G   G   !/G G   G   G   S   S   W   W   W   W   W   W   W   G   S   W   W   W   W   W   T   G   T   G   i   s   P   P   P   P   P   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
+      G   G   G   G   T   G   T   G   T   S   S   W   W   G   W   W   W   W   W   W   W   W   W   W   W   G   G   P   P   s   s   P   @/P P   c   P   s   G   G   G   G   G   G   G   T   G   G   G   G   G   
+      G   G   G   G   G   T   G   G   G   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   T   T   G   s   s   s   s   P   P   P   c   P   s   G   G   G   G   G   G   G   T   G   G   G   G   #/G 
+      G   G   G   G   G   G   G   G   G   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   s   s   s   s   P   s   s   P   s   G   G   G   G   G   G   G   G   T   G   G   G   G   
+      #/G G   G   G   G   G   G   G   G   S   W   T   W   W   W   W   W   W   W   W   W   G   W   T   G   T   G   G   s   c   s   s   P   s   s   P   G   G   G   G   G   G   T   G   G   G   G   G   G   G   
+      G   G   G   G   G   G   G   G   G   S   W   W   W   G   W   W   W   W   W   W   W   W   W   W   G   G   G   s   s   s   s   !/P P   P   P   P   P   P   T   T   G   T   G   G   G   G   G   G   T   G   
+      G   G   G   G   G   G   G   G   #/G S   W   W   W   W   W   W   W   W   W   W   W   W   W   T   G   G   G   G   G   s   s   s   P   s   s   G   P   s   s   G   T   T   G   T   G   T   G   G   G   G   
+      G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   G   W   W   W   W   W   W   T   G   T   G   s   s   s   s   s   P   s   s   P   G   s   s   s   G   G   G   T   T   G   T   G   G   G   
+      G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   s   s   s   c   d   s   s   s   P   P   s   s   s   s   G   G   T   G   T   G   T   #/G G   
+      G   G   T   G   G   G   G   G   G   G   W   W   W   W   W   G   W   W   W   W   W   W   W   G   G   G   G   s   s   s   s   s   s   s   s   P   P   s   s   s   s   G   G   G   G   T   s   s   G   G   
+      T   G   G   T   G   G   G   G   #/G G   W   W   W   W   W   W   W   W   W   W   G   W   G   G   G   G   T   G   s   G   s   s   s   c   s   P   P   s   s   G   s   G   T   G   G   s   s   s   s   G   
+      G   G   G   G   T   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   G   P   P   P   G   G   G   s   s   s   s   s   s   G   P   G   s   s   s   s   G   G   s   s   s   s   s   s   
+      S   S   G   G   G   G   G   G   T   W   W   W   W   W   W   W   W   W   W   W   W   S   G   s   s   s   G   G   G   T   s   s   s   s   c   P   P   s   s   P   @/P P   P   P   P   P   P   P   P   G   
+
+
 
 Actions:
+
+  - Name: init_player
+    InputMapping:
+      Internal: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, 0 ]
+    Behaviours:
+      - Src:
+          Object: player
+        Dst:
+          Object: player
+          Commands:
+            - incr: player_count
 
 
   - Name: update_player_stats
@@ -214,7 +264,7 @@ Actions:
           VectorToDest: [ 0, 0 ]
     Behaviours:
 
-      # Just repear this action every time step
+      # Just repeat this action every time step
       - Src:
           Object: player
         Dst:
@@ -244,12 +294,25 @@ Actions:
                 OnTrue:
                   - set: [ fatigue, 0 ]
                   - add: [ inv_energy, 1 ]
+                  - if:
+                      Conditions:
+                        gte: [ inv_energy, 9 ]
+                      OnTrue:
+                        - set: [ is_sleeping, 0 ]
+                        - if:
+                            Conditions:
+                              lt: [ ach_wake_up, 1 ]
+                            OnTrue:
+                              - set: [ ach_wake_up, 1]
+                              - reward: 1
+                              - set_tile: 0
             - if:
                 Conditions:
                   gt: [ fatigue, 30 ]
                 OnTrue:
                   - set: [ fatigue, 0 ]
                   - sub: [ inv_energy, 1 ]
+
       # handle hunger
       - Src:
           Object: player
@@ -327,13 +390,25 @@ Actions:
                   gt: [ recover, 50 ]
                 OnTrue:
                   - set: [ recover, 0 ]
-                  - add: [ health, 1 ]
+                  - if:
+                      Conditions:
+                        lt: [ health, 9 ]
+                      OnTrue:
+                        - add: [ health, 1 ]
             - if:
                 Conditions:
                   lt: [ recover, -30 ]
                 OnTrue:
                   - set: [ recover, 0 ]
                   - sub: [ health, 1 ]
+            - if:
+                Conditions:
+                  lte: [health, 0]
+                OnTrue:
+                  - set: [player_done, 1]
+                  - decr: player_count
+                  - remove: true
+
 
   - Name: move
     InputMapping:
@@ -365,6 +440,8 @@ Actions:
     Behaviours:
       - Src:
           Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
           Commands:
             - mov: _dest
             - rot: _dir
@@ -373,12 +450,13 @@ Actions:
           Object: [ grass, path, sand ]
       - Src:
           Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
           Commands:
             - rot: _dir
             - set_tile: meta.image_idx
         Dst:
           Object: [ cow, water, stone, plant, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
-
 
   - Name: do
     InputMapping:
@@ -391,10 +469,23 @@ Actions:
       # Player eats a (ripe) plant
       - Src:
           Preconditions:
-            - eq: [ dst.ripe, 1 ]
+            - and:
+              - eq: [ is_sleeping, 0 ]
+              - eq: [ dst.ripe, 1 ]
           Object: player
           Commands:
             - add: [ inv_food, 4 ]
+            - if:
+                Conditions:
+                  lt: [ ach_eat_plant, 1 ]
+                OnTrue:
+                  - set: [ ach_eat_plant, 1]
+                  - reward: 1
+            - if:
+                Conditions:
+                  gt: [inv_food, 9]
+                OnTrue:
+                  - set: [inv_food, 9]
         Dst:
           Object: plant
           Commands:
@@ -408,6 +499,8 @@ Actions:
       # Player collects a fence
       - Src:
           Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
           Commands:
             - add: [ inv_fence, 1 ]
         Dst:
@@ -418,6 +511,8 @@ Actions:
       # Player attacks a zombie
       - Src:
           Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
         Dst:
           Object: zombie
           Commands:
@@ -427,10 +522,19 @@ Actions:
                   lte: [ dst.health, 0 ]
                 OnTrue:
                   - remove: true
+                  - if:
+                      Conditions:
+                        lt: [ src.ach_defeat_zombie, 1 ]
+                      OnTrue:
+                        - set: [ src.ach_defeat_zombie, 1]
+                        - reward: 1
+
 
       # Player attacks a skeleton
       - Src:
           Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
         Dst:
           Object: skeleton
           Commands:
@@ -440,10 +544,18 @@ Actions:
                   lte: [ dst.health, 0 ]
                 OnTrue:
                   - remove: true
+                  - if:
+                      Conditions:
+                        lt: [ src.ach_defeat_skeleton, 1 ]
+                      OnTrue:
+                        - set: [ src.ach_defeat_skeleton, 1]
+                        - reward: 1
 
       # Player attacks a cow
       - Src:
           Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
         Dst:
           Object: cow
           Commands:
@@ -454,6 +566,70 @@ Actions:
                 OnTrue:
                   - remove: true
                   - add: [ src.inv_food, 6 ]
+                  - if:
+                      Conditions:
+                        gt: [src.inv_food, 9]
+                      OnTrue:
+                        - set: [src.inv_food, 9]
+                  - if:
+                      Conditions:
+                        lt: [ src.ach_eat_cow, 1 ]
+                      OnTrue:
+                        - set: [ src.ach_eat_cow, 1]
+                        - reward: 1
+
+      # Player attacks a player
+      - Src:
+          Object: player
+          Preconditions:
+            eq: [ is_sleeping, 0 ]
+        Dst:
+          Object: player
+          Commands:
+            - sub: [ dst.health, src.damage ]
+            - if:
+                Conditions:
+                  lte: [ dst.health, 0 ]
+                OnTrue:
+                  - set: [ dst.player_done, 1]
+                  - decr: player_count
+                  - remove: true
+                  - add: [ src.inv_food, dst.inv_food ]
+                  - add: [ src.inv_drink, dst.inv_drink ]
+                  - add: [ src.inv_wood, dst.inv_wood ]
+                  - add: [ src.inv_coal, dst.inv_coal ]
+                  - add: [ src.inv_iron, dst.inv_iron ]
+                  - if:
+                      Conditions:
+                        gt: [src.inv_food, 9]
+                      OnTrue:
+                        - set: [src.inv_food, 9]
+                  - if:
+                      Conditions:
+                        gt: [src.inv_drink, 9]
+                      OnTrue:
+                        - set: [src.inv_drink, 9]
+                  - if:
+                      Conditions:
+                        gt: [src.inv_wood, 9]
+                      OnTrue:
+                        - set: [src.inv_wood, 9]
+                  - if:
+                      Conditions:
+                        gt: [src.inv_coal, 9]
+                      OnTrue:
+                        - set: [src.inv_coal, 9]
+                  - if:
+                      Conditions:
+                        gt: [src.inv_iron, 9]
+                      OnTrue:
+                        - set: [src.inv_iron, 9]
+                  - if:
+                      Conditions:
+                        lt: [ src.ach_defeat_player, 1 ]
+                      OnTrue:
+                        - set: [ src.ach_defeat_player, 1]
+                        - reward: 1
 
 
   #   tree: {require: {}, receive: {wood: 1}, leaves: grass}
@@ -469,7 +645,7 @@ Actions:
       Inputs:
         1:
           VectorToDest: [ 0, -1 ]
-          Description: "Collect wood from a tree"
+          Description: "Collect wood"
           MetaData:
             action_id: 1
         2:
@@ -509,10 +685,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - lt: [ inv_wood, 9 ]
                 - eq: [ meta.action_id, 1 ]
           Commands:
             - add: [ inv_wood, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_wood, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_wood, 1]
+                  - reward: 1
         Dst:
           Object: tree
           Commands:
@@ -524,11 +707,18 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_wood_pickaxe, 1 ]
                 - lt: [ inv_stone, 9 ]
                 - eq: [ meta.action_id, 2 ]
           Commands:
             - add: [ inv_stone, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_stone, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_stone, 1]
+                  - reward: 1
         Dst:
           Object: stone
           Commands:
@@ -540,11 +730,18 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_wood_pickaxe, 1 ]
                 - lt: [ inv_coal, 9 ]
                 - eq: [ meta.action_id, 3 ]
           Commands:
             - add: [ inv_coal, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_coal, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_coal, 1]
+                  - reward: 1
         Dst:
           Object: coal
           Commands:
@@ -556,11 +753,18 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_stone_pickaxe, 1 ]
                 - lt: [ inv_iron, 9 ]
                 - eq: [ meta.action_id, 4 ]
           Commands:
             - add: [ inv_iron, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_iron, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_iron, 1]
+                  - reward: 1
         Dst:
           Object: iron
           Commands:
@@ -572,11 +776,18 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_iron_pickaxe, 1 ]
                 - lt: [ inv_diamond, 9 ]
                 - eq: [ meta.action_id, 5 ]
           Commands:
             - add: [ inv_diamond, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_diamond, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_diamond, 1]
+                  - reward: 1
         Dst:
           Object: diamond
           Commands:
@@ -588,10 +799,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - lt: [ inv_drink, 9 ]
                 - eq: [ meta.action_id, 6 ]
           Commands:
             - add: [ inv_drink, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_drink, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_drink, 1]
+                  - reward: 1
         Dst:
           Object: water
 
@@ -601,10 +819,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 7 ]
                 - lt: [ inv_sapling, 9 ]
           Commands:
             - add: [ inv_sapling, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_collect_sapling, 1 ]
+                OnTrue:
+                  - set: [ ach_collect_sapling, 1]
+                  - reward: 1
         Dst:
           Object: grass
         Probability: 0.1
@@ -644,11 +869,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 1 ]
                 - gte: [ inv_stone, 1 ]
-
           Commands:
             - sub: [ inv_stone, 1 ]
+            - if:
+                Conditions:
+                  lt: [ ach_place_stone, 1 ]
+                OnTrue:
+                  - set: [ ach_place_stone, 1]
+                  - reward: 1
         Dst:
           Object: [ grass, sand, path, water, lava ]
           Commands:
@@ -659,11 +890,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 2 ]
                 - gte: [ inv_wood, 2 ]
-
           Commands:
             - sub: [ inv_wood, 2 ]
+            - if:
+                Conditions:
+                  lt: [ ach_place_table, 1 ]
+                OnTrue:
+                  - set: [ ach_place_table, 1]
+                  - reward: 1
         Dst:
           Object: [ grass, sand, path ]
           Commands:
@@ -674,11 +911,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 3 ]
                 - gte: [ inv_stone, 4 ]
-
           Commands:
             - sub: [ inv_stone, 4 ]
+            - if:
+                Conditions:
+                  lt: [ ach_place_furnace, 1 ]
+                OnTrue:
+                  - set: [ ach_place_furnace, 1]
+                  - reward: 1
         Dst:
           Object: [ grass, sand, path ]
           Commands:
@@ -689,11 +932,17 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 4 ]
                 - gte: [ inv_sapling, 1 ]
-
           Commands:
             - decr: inv_sapling
+            - if:
+                Conditions:
+                  lt: [ ach_place_plant, 1 ]
+                OnTrue:
+                  - set: [ ach_place_plant, 1]
+                  - reward: 1
         Dst:
           Object: grass
           Commands:
@@ -739,11 +988,18 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 1 ]
                 - gte: [ inv_wood, 1 ]
                 - lt: [ inv_wood_pickaxe, 1 ]
           Commands:
             - decr: inv_wood
+            - if:
+                Conditions:
+                  lt: [ ach_make_wood_pickaxe, 1 ]
+                OnTrue:
+                  - set: [ ach_make_wood_pickaxe, 1]
+                  - reward: 1
         Dst:
           Object: player
           Commands:
@@ -754,6 +1010,7 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 2 ]
                 - gte: [ inv_wood, 1 ]
                 - gte: [ inv_stone, 1 ]
@@ -762,6 +1019,12 @@ Actions:
           Commands:
             - decr: inv_stone
             - decr: inv_wood
+            - if:
+                Conditions:
+                  lt: [ ach_make_stone_pickaxe, 1 ]
+                OnTrue:
+                  - set: [ ach_make_stone_pickaxe, 1]
+                  - reward: 1
         Dst:
           Object: player
           Commands:
@@ -772,6 +1035,7 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 3 ]
                 - gte: [ inv_wood, 1 ]
                 - gte: [ inv_iron, 1 ]
@@ -783,6 +1047,12 @@ Actions:
             - decr: inv_coal
             - decr: inv_wood
             - decr: inv_iron
+            - if:
+                Conditions:
+                  lt: [ ach_make_iron_pickaxe, 1 ]
+                OnTrue:
+                  - set: [ ach_make_iron_pickaxe, 1]
+                  - reward: 1
         Dst:
           Object: player
           Commands:
@@ -793,11 +1063,18 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 4 ]
                 - gte: [ inv_wood, 1 ]
                 - lt: [ inv_wood_sword, 1 ]
           Commands:
             - decr: inv_wood
+            - if:
+                Conditions:
+                  lt: [ ach_make_wood_sword, 1 ]
+                OnTrue:
+                  - set: [ ach_make_wood_sword, 1]
+                  - reward: 1
         Dst:
           Object: player
           Commands:
@@ -809,6 +1086,7 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 5 ]
                 - gte: [ inv_wood, 1 ]
                 - gte: [ inv_stone, 1 ]
@@ -817,6 +1095,12 @@ Actions:
           Commands:
             - decr: inv_stone
             - decr: inv_wood
+            - if:
+                Conditions:
+                  lt: [ ach_make_stone_sword, 1 ]
+                OnTrue:
+                  - set: [ ach_make_stone_sword, 1]
+                  - reward: 1
         Dst:
           Object: player
           Commands:
@@ -828,6 +1112,7 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 6 ]
                 - gte: [ inv_wood, 1 ]
                 - gte: [ inv_iron, 1 ]
@@ -839,11 +1124,33 @@ Actions:
             - decr: inv_coal
             - decr: inv_wood
             - decr: inv_iron
+            - if:
+                Conditions:
+                  lt: [ ach_make_iron_sword, 1 ]
+                OnTrue:
+                  - set: [ ach_make_iron_sword, 1]
+                  - reward: 1
         Dst:
           Object: player
           Commands:
             - set: [ inv_iron_sword, 1 ]
             - set: [ damage, 5 ]
+
+  - Name: sleep
+    InputMapping:
+      Relative: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, 0 ]
+          Description: "Go to sleep"
+    Behaviours:
+      - Src:
+          Object: player
+          Commands:
+            - set: [is_sleeping, 1]
+            - set_tile: 5
+        Dst:
+          Object: player
 
   ################# TABLE AND FURNACE #######################
 
@@ -937,6 +1244,7 @@ Actions:
             - eq: [ is_chasing, 0 ]
           Commands:
             - mov: _dest
+            - rot: _dir
             - exec:
                 Action: skeleton_random_movement
                 Delay: 3
@@ -954,7 +1262,7 @@ Actions:
                 Delay: 3
                 Randomize: true
         Dst:
-          Object: [ _boundary, _empty, grass, sand, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, grass, sand, cow, water, stone, plant, tree, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: skeleton_chase_player
     InputMapping:
@@ -976,53 +1284,60 @@ Actions:
       - Src:
           Object: skeleton
           Commands:
-            - set: [ chase_cooldown, 0 ]
+            - set: [ src.chase_cooldown, 0 ]
             - mov: _dest
+            - rot: _dir
         Dst:
-          Object: [ path ]
-
-  - Name: skeleton_chase_proximity_trigger_off
-    Trigger:
-      Range: 9
-      Type: RANGE_BOX_BOUNDARY
-    InputMapping:
-      Internal: true
-    Behaviours:
+          Object: path
       - Src:
           Object: skeleton
-          Preconditions:
-            - eq: [ is_chasing, 1 ]
           Commands:
-            - set: [ is_chasing, 0 ]
-            - exec:
-                Action: skeleton_random_movement
-                Delay: 3
-                Randomize: true
+            - set: [ src.chase_cooldown, 0 ]
         Dst:
-          Object: player
+          Object: [ _boundary, cow, player, arrow, water, grass, sand, stone, plant, skeleton, zombie, coal, lava, iron, diamond, table, furnace ]
 
-  - Name: skeleton_chase_proximity_trigger_on
-    Trigger:
-      Range: 8
-      Type: RANGE_BOX_AREA
-    InputMapping:
-      Internal: true
-    Behaviours:
-      - Src:
-          Preconditions:
-            - eq: [ src.chase_cooldown, 0 ]
-          Object: skeleton
-          Commands:
-            - set: [ is_chasing, 1 ]
-            - set: [ chase_cooldown, 1 ]
-            - exec:
-                Action: skeleton_chase_player
-                Delay: 3
-                Search:
-                  ImpassableObjects: [ water, stone, plant, coal, lava, iron, diamond, table, furnace ]
-                  TargetObjectName: player
-        Dst:
-          Object: player
+#  - Name: skeleton_chase_proximity_trigger_off
+#    Trigger:
+#      Range: 9
+#      Type: RANGE_BOX_BOUNDARY
+#    InputMapping:
+#      Internal: true
+#    Behaviours:
+#      - Src:
+#          Object: skeleton
+#          Preconditions:
+#            - eq: [ src.is_chasing, 1 ]
+#          Commands:
+#            - set: [ src.is_chasing, 0 ]
+#            - exec:
+#                Action: skeleton_random_movement
+#                Delay: 3
+#                Randomize: true
+#        Dst:
+#          Object: player
+#
+#  - Name: skeleton_chase_proximity_trigger_on
+#    Trigger:
+#      Range: 8
+#      Type: RANGE_BOX_AREA
+#    InputMapping:
+#      Internal: true
+#    Behaviours:
+#      - Src:
+#          Preconditions:
+#            - eq: [ src.chase_cooldown, 0 ]
+#          Object: skeleton
+#          Commands:
+#            - set: [ src.is_chasing, 1 ]
+#            - set: [ src.chase_cooldown, 1 ]
+#            - exec:
+#                Action: skeleton_chase_player
+#                Delay: 3
+#                Search:
+#                  ImpassableObjects: [ water, cow, stone, tree, zombie, skeleton, plant, coal, lava, iron, diamond, table, furnace ]
+#                  TargetObjectName: player
+#        Dst:
+#          Object: player
 
   - Name: arrow_projectile
     InputMapping:
@@ -1043,18 +1358,58 @@ Actions:
           Commands:
             - remove: true
         Dst:
-          Object: [ _boundary, _empty, cow, stone, plant, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, arrow, tree, stone, plant, coal, lava, iron, diamond ]
+
+      - Src:
+          Object: arrow
+          Commands:
+            - remove: true
+        Dst:
+          Object: [ cow, zombie, skeleton ]
+          Commands:
+            - sub: [ health, 2 ]
+            - if:
+                Conditions:
+                  lte: [ health, 0 ]
+                OnTrue:
+                  - remove: true
+      - Src:
+          Object: arrow
+          Commands:
+            - remove: true
+        Dst:
+          Object: player
+          Commands:
+            - sub: [ health, 2 ]
+            - if:
+                Conditions:
+                  lte: [ health, 0 ]
+                OnTrue:
+                  - set: [ dst.player_done, 1]
+                  - decr: player_count
+                  - remove: true
+      - Src:
+          Object: arrow
+          Commands:
+            - remove: true
+        Dst:
+          Object: [ table, furnace ]
+          Commands:
+            - remove: true
 
   - Name: set_arrow_direction
     InputMapping:
       Internal: true
+      Inputs:
+        1:
+          VectorToDest: [ 0, 0 ]
     Behaviours:
       - Src:
           Object: arrow
           Commands:
             - set_tile: meta.image_idx
         Dst:
-          Object: [ water, path, grass, sand ]
+          Object: [ water, path, grass, sand, arrow ]
 
   - Name: fire_arrow
     InputMapping:
@@ -1098,12 +1453,12 @@ Actions:
       - Src:
           Object: skeleton
           Commands:
-            - set: [ reload_cooldown, 0 ]
+            - set: [ src.reload_cooldown, 0 ]
         Dst:
           Object: skeleton
 
   - Name: skeleton_fire_proximity_trigger
-    #Probability: 0.5
+    Probability: 1.0
     Trigger:
       Range: 5
       Type: RANGE_BOX_AREA
@@ -1111,17 +1466,47 @@ Actions:
       Internal: true
     Behaviours:
       - Src:
-          #          Preconditions:
-          #            - eq: [ src.reload_cooldown, 0 ]
+          Preconditions:
+            - eq: [ src.reload_cooldown, 0 ]
           Object: skeleton
           Commands:
-            #- set: [ reload_cooldown, 1 ]
+            - set: [ src.reload_cooldown, 1 ]
             - exec:
-                Action: fire_arrow
-                Randomize: true
-        #            - exec:
-        #                 Action: reload_arrow
-        #                 Delay: 1
+                Action: reload_arrow
+                Delay: 2
+                ActionId: 1
+            - if:
+                Conditions:
+                  eq: [src._dx, 1]
+                OnTrue:
+                  - exec:
+                      Action: fire_arrow
+                      Delay: 1
+                      ActionId: 2
+            - if:
+                Conditions:
+                  eq: [src._dx, -1]
+                OnTrue:
+                  - exec:
+                      Action: fire_arrow
+                      Delay: 1
+                      ActionId: 4
+            - if:
+                Conditions:
+                  eq: [src._dy, 1]
+                OnTrue:
+                  - exec:
+                      Action: fire_arrow
+                      Delay: 1
+                      ActionId: 3
+            - if:
+                Conditions:
+                  eq: [src._dy, -1]
+                OnTrue:
+                  - exec:
+                      Action: fire_arrow
+                      Delay: 1
+                      ActionId: 1
         Dst:
           Object: player
   ###########################################################
@@ -1135,7 +1520,7 @@ Actions:
       - Src:
           Object: zombie
           Preconditions:
-            - eq: [ is_chasing, 0 ]
+            - eq: [ src.is_chasing, 0 ]
           Commands:
             - mov: _dest
             - exec:
@@ -1147,7 +1532,7 @@ Actions:
       - Src:
           Object: zombie
           Preconditions:
-            - eq: [ is_chasing, 0 ]
+            - eq: [ src.is_chasing, 0 ]
           Commands:
             - exec:
                 Action: zombie_random_movement
@@ -1163,7 +1548,7 @@ Actions:
       - Src:
           Object: zombie
           Commands:
-            - set: [ chase_cooldown, 0 ]
+            - set: [ src.chase_cooldown, 0 ]
             - mov: _dest
         Dst:
           Object: [ grass, path, sand ]
@@ -1171,32 +1556,45 @@ Actions:
       - Src:
           Object: zombie
           Commands:
-            - set: [ chase_cooldown, 0 ]
+            - set: [ src.chase_cooldown, 0 ]
         Dst:
           Object: [ _boundary, cow, water, stone, plant, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
       # Zombie attacks player
       - Src:
           Object: zombie
-          Preconditions:
-            eq: [ attack_cooldown, 0 ]
           Commands:
-            - set: [ chase_cooldown, 0 ]
-            - set: [ attack_cooldown, 1 ]
-            - exec:
-                Action: act_attack_cooldown
-                Delay: 5
-                ActionId: 1
+            - set: [ src.chase_cooldown, 0 ]
+            - if:
+                Conditions:
+                  eq: [ src.attack_cooldown, 0]
+                OnTrue:
+                  - set: [ src.attack_cooldown, 1 ]
+                  - exec:
+                      Action: act_attack_cooldown
+                      Delay: 5
+                      ActionId: 1
         Dst:
           Object: player
           Commands:
             - if:
                 Conditions:
-                  eq: [ is_sleeping, 1 ]
+                  eq: [ src.attack_cooldown, 0]
                 OnTrue:
-                  - sub: [ health, 7 ]
-                OnFalse:
-                  - sub: [ health, 2 ]
+                  - if:
+                      Conditions:
+                        eq: [ is_sleeping, 1 ]
+                      OnTrue:
+                        - sub: [ health, 7 ]
+                      OnFalse:
+                        - sub: [ health, 2 ]
+                  - if:
+                      Conditions:
+                        lte: [ health, 0 ]
+                      OnTrue:
+                        - set: [ dst.player_done, 1]
+                        - decr: player_count
+                        - remove: true
 
 
   - Name: zombie_chase_proximity_trigger_off
@@ -1209,16 +1607,16 @@ Actions:
       - Src:
           Object: zombie
           Preconditions:
-            - eq: [ is_chasing, 1 ]
+            - eq: [ src.is_chasing, 1 ]
           Commands:
-            - set: [ is_chasing, 0 ]
+            - set: [ src.is_chasing, 0 ]
             - exec:
                 Action: zombie_random_movement
                 Delay: 3
                 Randomize: true
         Dst:
           Object: player
-  #
+
   - Name: zombie_chase_proximity_trigger_on
     Trigger:
       Range: 8
@@ -1231,13 +1629,13 @@ Actions:
             - eq: [ src.chase_cooldown, 0 ]
           Object: zombie
           Commands:
-            - set: [ is_chasing, 1 ]
-            - set: [ chase_cooldown, 1 ]
+            - set: [ src.is_chasing, 1 ]
+            - set: [ src.chase_cooldown, 1 ]
             - exec:
                 Action: zombie_chase_player
                 Delay: 2
                 Search:
-                  ImpassableObjects: [ water, stone, tree, zombie, plant, coal, lava, iron, diamond, table, furnace ]
+                  ImpassableObjects: [ water, cow, stone, tree, zombie, skeleton, plant, coal, lava, iron, diamond, table, furnace ]
                   TargetObjectName: player
         Dst:
           Object: player
@@ -1330,6 +1728,8 @@ Objects:
       - Action: update_player_stats
         Delay: 1
         ActionId: 1
+      - Action: init_player
+        ActionId: 1
     Z: 2
     Observers:
       Sprite2D:
@@ -1339,6 +1739,8 @@ Objects:
         - Image: sprite2d/player-right.png
         - Image: sprite2d/player-down.png
         - Image: sprite2d/player-sleep.png
+
+
   - Name: water
     MapCharacter: W
     Z: 1
@@ -1353,6 +1755,7 @@ Objects:
         - Image: sprite2d/grass.png
   - Name: stone
     MapCharacter: s
+    Z: 2
     Observers:
       Sprite2D:
         - Image: sprite2d/stone.png
@@ -1440,9 +1843,10 @@ Objects:
     Z: 2
     MapCharacter: a
     InitialActions:
-      - Action: set_arrow_direction
       - Action: arrow_projectile
         Delay: 1
+      - Action: set_arrow_direction
+        ActionId: 1
     Observers:
       Sprite2D:
         - Image: sprite2d/arrow-up.png

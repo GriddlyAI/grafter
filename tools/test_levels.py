@@ -10,15 +10,15 @@ from grafter.wrapper import GrafterWrapper
 
 if __name__ == "__main__":
 
-    env = GrafterWrapper(100, 100)
-
-    start = timeit.default_timer()
+    env = GrafterWrapper(100, 100, level_id=0)
 
     env.reset()
 
+    start = timeit.default_timer()
+
     frames = 0
 
-    for i in range(80000):
+    for i in range(20000):
 
         obs, reward, done, info = env.step(env.action_space.sample())
 
@@ -27,11 +27,11 @@ if __name__ == "__main__":
         # env.render()
         # env.render(observer='global')
 
-        if done:
+        if done or i % 1000 == 0:
             end = timeit.default_timer()
             print(f"{len(obs)*frames / (end - start):.2f} SPS")
             frames = 0
-            start = timeit.default_timer()
             env.reset()
+            start = timeit.default_timer()
 
     print("end")

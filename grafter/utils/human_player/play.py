@@ -5,4 +5,4 @@ if __name__ == "__main__":
 
     env = GrafterWrapper(30, 30)
     env = PlayWrapper(env, seed=100)
-    env.play()
+    env.play(fps=60)

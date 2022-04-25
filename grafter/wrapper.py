@@ -12,9 +12,12 @@ class GrafterWrapper(gym.Wrapper):
         width,
         height,
         generator_seed=100,
-        player_observer_type=gd.ObserverType.SPRITE_2D,
+        player_observer_type=gd.ObserverType.VECTOR,
         global_observer_type=gd.ObserverType.SPRITE_2D,
+        level_id=None
     ):
+
+        self._level_id = level_id
 
         current_file = Path(__file__).parent
         self._genv = GymWrapper(
@@ -24,11 +27,14 @@ class GrafterWrapper(gym.Wrapper):
             gdy_path=str(current_file.joinpath("gdy")),
             shader_path=str(current_file.joinpath("assets/shaders")),
             image_path=str(current_file.joinpath("assets")),
+            level=level_id
         )
 
-        self._generator = CrafterLevelGenerator(
-            generator_seed, width, height, self._genv.player_count
-        )
+
+        if self._level_id is None:
+            self._generator = CrafterLevelGenerator(
+                generator_seed, width, height, self._genv.player_count
+            )
 
         super().__init__(self._genv)
 
@@ -36,8 +42,11 @@ class GrafterWrapper(gym.Wrapper):
         return self.env.step(action)
 
     def reset(self):
-        level_string = self._generator.generate()
-        reset_obs = self.env.reset(level_string=level_string)
+        if self._level_id is None:
+            level_string = self._generator.generate()
+            reset_obs = self.env.reset(level_string=level_string)
+        else:
+            reset_obs = self.env.reset(level_id=self._level_id)
         self.action_space = self.env.action_space
         self.observation_space = self.env.action_space
 
