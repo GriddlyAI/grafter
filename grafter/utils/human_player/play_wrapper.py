@@ -7,10 +7,10 @@ KEYWORD_TO_KEY = {
     (ord("w"),): [0, 2],
     (ord("d"),): [0, 3],
     (ord("s"),): [0, 4],
-    (ord('e'),): [1, 1], # do
-    (ord('r'),): [2, 1], # collect
-    (ord('f'),): [3, 1], # place
-    (ord('g'),): [4, 1], # make
+    (ord('r'),): [1, 1], # do
+    (ord('q'),): [2, 1], # collect
+    (ord('r'),): [3, 1], # place
+    (ord('f'),): [4, 1], # make
 }
 
 from pygame.locals import VIDEORESIZE

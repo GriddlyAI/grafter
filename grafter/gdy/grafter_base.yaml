@@ -3,15 +3,45 @@ Environment:
   Name: Grafter
   Description: Griddly port of the crafter environment from https://danijar.com/project/crafter/.
   Observers:
+    Entity:
+      IncludeMasks: true
+      IncludePlayerId: [ player ]
+      IncludeRotation: [ player ]
+      GlobalVariableMapping:
+        - inv_wood_sword
+        - inv_stone_sword
+        - inv_iron_sword
+        - inv_wood_pickaxe
+        - inv_stone_pickaxe
+        - inv_iron_pickaxe
+        - inv_sapling
+        - inv_stone
+        - inv_coal
+        - inv_wood
+        - inv_iron
+        - inv_diamond
+        - inv_food
+        - inv_drink
+        - inv_energy
+        - health
     Sprite2D:
-      TileSize: 20
+      TileSize: 10
       RotateAvatarImage: false
   Termination:
     End:
-      - eq: [player_count, 0]
+      - eq: [ player_count, 0 ]
+  Player:
+    Count: 1
+    AvatarObject: player
+    Observer:
+      HighlightPlayers: false
+      TrackAvatar: true
+      RotateWithAvatar: false
+      Height: 9
+      Width: 9
   Variables:
 
-    # ACHEIVEMENTS
+    # ACHIEVEMENTS
     - Name: ach_collect_coal
       InitialValue: 0
       PerPlayer: true
@@ -136,7 +166,7 @@ Environment:
       InitialValue: 9
       PerPlayer: true
     - Name: health
-      InitialValue: 900
+      InitialValue: 9
       PerPlayer: true
 
     # Misc
@@ -174,70 +204,8 @@ Environment:
     - Name: player_count
       InitialValue: 0
 
-  Player:
-    Count: 8
-    AvatarObject: player
-    Observer:
-      HighlightPlayers: false
-      TrackAvatar: true
-      RotateWithAvatar: false
-      Height: 9
-      Width: 9
-
   Levels:
     - |
-      G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   T   s   s   s   s   s   G   T   G   T   G   G   
-      G   G   G   G   G   T   G   T   G   G   #/G G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   W   G   G   T   G   G   G   G   G   
-      G   G   G   G   T   G   G   T   T   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   W   W   W   W   W   W   W   W   W   W   S   G   G   G   G   G   
-      S   G   G   T   G   T   G   G   G   G   G   G   G   G   G   !/G G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   S   S   G   S   S   
-      S   G   !/G T   G   G   G   G   G   G   G   G   G   G   !/G G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   S   S   S   S   
-      W   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   W   W   W   W   S   S   
-      W   G   G   G   G   G   G   G   G   G   G   G   s   s   s   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   G   W   W   W   W   W   W   W   W   W   W   W   W   S   S   
-      W   W   G   G   G   G   G   G   G   G   G   s   P   s   s   s   s   G   G   G   W   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   W   W   W   S   S   
-      W   W   G   G   G   G   G   G   G   G   G   s   G   s   s   G   G   T   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   T   T   G   G   G   W   W   W   W   W   W   W   W   W   S   S   
-      W   W   G   G   G   G   !/G G   G   G   G   s   P   s   s   T   G   G   G   G   W   W   W   W   W   W   W   W   W   W   G   G   W   G   T   G   G   G   G   G   W   W   W   W   W   W   W   S   S   S   
-      W   W   G   G   G   G   G   G   G   G   G   G   P   s   T   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   T   G   G   T   G   G   G   G   G   G   W   W   S   S   S   S   S   G   
-      W   W   G   G   G   G   G   G   G   G   s   s   P   s   G   G   T   G   G   G   W   W   W   W   W   W   W   W   W   G   W   T   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   T   
-      W   W   G   G   G   G   G   G   G   G   c   s   P   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   #/G 
-      W   W   !/G G   G   G   G   T   G   G   G   s   P   T   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   T   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   T   G   
-      G   G   G   G   G   G   T   G   T   G   G   G   P   T   G   #/G G   G   G   S   W   W   W   W   W   W   W   W   W   W   G   T   G   G   !/G G   T   T   G   G   G   G   G   G   G   G   G   G   G   G   
-      W   S   G   G   G   G   T   G   G   #/G G   G   G   G   G   G   T   G   G   S   W   S   W   W   W   W   W   W   W   S   G   G   G   G   G   G   G   G   G   T   G   !/G G   G   G   G   G   G   G   G   
-      S   S   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   T   S   S   W   G   W   W   W   W   W   S   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
-      S   S   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   S   G   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
-      S   S   G   G   T   G   T   G   G   G   G   G   G   G   G   G   G   T   G   G   G   S   S   S   S   S   S   S   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   #/G G   !/G G   G   G   G   G   
-      G   S   G   T   G   G   G   #/G T   G   G   G   G   G   G   T   G   G   G   G   G   G   G   S   S   S   S   !/G G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   T   G   G   
-      S   S   G   G   G   T   G   G   T   #/G G   G   G   G   G   G   G   G   T   G   G   G   G   G   S   S   S   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   T   G   G   G   G   T   G   S   
-      S   G   G   G   T   T   G   G   G   G   G   G   G   T   T   G   T   G   G   G   G   G   G   #/G G   G   S   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   S   S   W   
-      S   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   G   G   T   G   T   T   G   G   G   G   T   G   p2/GG   G   G   G   G   G   G   S   W   W   W   
-      G   T   T   T   G   G   G   G   G   T   #/G G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   S   W   W   W   W   
-      S   T   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   p1/GG   W   W   W   W   W   W   W   
-      S   T   T   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   
-      W   G   G   G   G   G   G   T   G   G   G   T   G   G   G   G   G   G   G   G   G   G   G   G   G   T   G   G   T   S   G   G   G   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   
-      W   S   G   T   G   G   G   G   G   G   G   T   T   G   #/G G   G   G   G   G   #/G G   G   G   G   G   S   S   S   S   S   S   G   T   G   G   S   S   S   G   G   G   G   W   W   W   W   W   W   W   
-      W   W   S   G   G   G   G   G   G   #/G G   G   G   T   G   G   G   G   G   G   G   G   T   T   S   S   W   W   W   W   S   S   S   G   G   S   S   S   S   G   G   G   G   G   W   W   W   W   W   W   
-      W   W   S   G   T   G   G   G   G   G   G   G   G   #/G G   G   G   !/G G   G   G   G   S   S   G   W   W   W   W   W   S   S   S   S   S   S   S   S   S   G   G   G   G   G   G   W   W   G   W   W   
-      W   W   S   T   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   S   S   S   S   W   W   W   W   W   W   W   S   S   S   G   G   S   S   S   G   G   G   G   T   G   G   S   W   W   W   W   
-      W   S   S   T   G   G   G   G   G   G   G   G   G   T   T   T   G   W   S   W   W   W   W   G   W   W   W   W   W   S   S   S   G   G   G   G   G   G   G   T   G   G   G   G   G   G   S   W   W   W   
-      W   G   S   G   G   G   G   G   G   G   T   G   G   T   G   W   G   W   W   W   W   W   W   W   W   W   G   W   W   W   S   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   S   S   
-      W   S   S   G   G   G   G   G   G   G   G   G   T   T   W   W   W   W   W   W   G   W   W   W   W   G   W   W   W   G   G   G   G   G   G   G   G   G   G   G   T   G   G   G   G   G   G   G   G   G   
-      S   S   T   G   G   G   G   G   G   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   G   G   G   G   G   G   G   G   T   T   G   G   G   G   G   G   G   
-      G   G   G   G   G   G   G   G   !/G G   S   T   W   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   #/G G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
-      P   G   G   G   G   G   G   G   G   S   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   G   P   P   P   P   G   G   G   G   G   G   G   G   G   G   !/G G   G   G   G   
-      s   G   #/G G   G   !/G G   G   G   S   S   W   W   W   W   W   W   W   G   S   W   W   W   W   W   T   G   T   G   i   s   P   P   P   P   P   G   G   G   G   G   G   G   G   G   G   G   G   G   G   
-      G   G   G   G   T   G   T   G   T   S   S   W   W   G   W   W   W   W   W   W   W   W   W   W   W   G   G   P   P   s   s   P   @/P P   c   P   s   G   G   G   G   G   G   G   T   G   G   G   G   G   
-      G   G   G   G   G   T   G   G   G   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   T   T   G   s   s   s   s   P   P   P   c   P   s   G   G   G   G   G   G   G   T   G   G   G   G   #/G 
-      G   G   G   G   G   G   G   G   G   S   S   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   s   s   s   s   P   s   s   P   s   G   G   G   G   G   G   G   G   T   G   G   G   G   
-      #/G G   G   G   G   G   G   G   G   S   W   T   W   W   W   W   W   W   W   W   W   G   W   T   G   T   G   G   s   c   s   s   P   s   s   P   G   G   G   G   G   G   T   G   G   G   G   G   G   G   
-      G   G   G   G   G   G   G   G   G   S   W   W   W   G   W   W   W   W   W   W   W   W   W   W   G   G   G   s   s   s   s   !/P P   P   P   P   P   P   T   T   G   T   G   G   G   G   G   G   T   G   
-      G   G   G   G   G   G   G   G   #/G S   W   W   W   W   W   W   W   W   W   W   W   W   W   T   G   G   G   G   G   s   s   s   P   s   s   G   P   s   s   G   T   T   G   T   G   T   G   G   G   G   
-      G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   G   W   W   W   W   W   W   T   G   T   G   s   s   s   s   s   P   s   s   P   G   s   s   s   G   G   G   T   T   G   T   G   G   G   
-      G   G   G   G   G   G   G   G   G   S   W   W   W   W   W   W   W   W   W   W   W   W   W   G   G   G   G   s   s   s   c   d   s   s   s   P   P   s   s   s   s   G   G   T   G   T   G   T   #/G G   
-      G   G   T   G   G   G   G   G   G   G   W   W   W   W   W   G   W   W   W   W   W   W   W   G   G   G   G   s   s   s   s   s   s   s   s   P   P   s   s   s   s   G   G   G   G   T   s   s   G   G   
-      T   G   G   T   G   G   G   G   #/G G   W   W   W   W   W   W   W   W   W   W   G   W   G   G   G   G   T   G   s   G   s   s   s   c   s   P   P   s   s   G   s   G   T   G   G   s   s   s   s   G   
-      G   G   G   G   T   G   G   G   G   W   W   W   W   W   W   W   W   W   W   W   W   W   G   P   P   P   G   G   G   s   s   s   s   s   s   G   P   G   s   s   s   s   G   G   s   s   s   s   s   s   
-      S   S   G   G   G   G   G   G   T   W   W   W   W   W   W   W   W   W   W   W   W   S   G   s   s   s   G   G   G   T   s   s   s   s   c   P   P   s   s   P   @/P P   P   P   P   P   P   P   P   G   
-
-
 
 Actions:
 
@@ -303,7 +271,7 @@ Actions:
                             Conditions:
                               lt: [ ach_wake_up, 1 ]
                             OnTrue:
-                              - set: [ ach_wake_up, 1]
+                              - set: [ ach_wake_up, 1 ]
                               - reward: 1
                               - set_tile: 0
             - if:
@@ -403,9 +371,9 @@ Actions:
                   - sub: [ health, 1 ]
             - if:
                 Conditions:
-                  lte: [health, 0]
+                  lte: [ health, 0 ]
                 OnTrue:
-                  - set: [player_done, 1]
+                  - set: [ player_done, 1 ]
                   - decr: player_count
                   - remove: true
 
@@ -470,8 +438,8 @@ Actions:
       - Src:
           Preconditions:
             - and:
-              - eq: [ is_sleeping, 0 ]
-              - eq: [ dst.ripe, 1 ]
+                - eq: [ is_sleeping, 0 ]
+                - eq: [ dst.ripe, 1 ]
           Object: player
           Commands:
             - add: [ inv_food, 4 ]
@@ -479,13 +447,13 @@ Actions:
                 Conditions:
                   lt: [ ach_eat_plant, 1 ]
                 OnTrue:
-                  - set: [ ach_eat_plant, 1]
+                  - set: [ ach_eat_plant, 1 ]
                   - reward: 1
             - if:
                 Conditions:
-                  gt: [inv_food, 9]
+                  gt: [ inv_food, 9 ]
                 OnTrue:
-                  - set: [inv_food, 9]
+                  - set: [ inv_food, 9 ]
         Dst:
           Object: plant
           Commands:
@@ -526,7 +494,7 @@ Actions:
                       Conditions:
                         lt: [ src.ach_defeat_zombie, 1 ]
                       OnTrue:
-                        - set: [ src.ach_defeat_zombie, 1]
+                        - set: [ src.ach_defeat_zombie, 1 ]
                         - reward: 1
 
 
@@ -548,7 +516,7 @@ Actions:
                       Conditions:
                         lt: [ src.ach_defeat_skeleton, 1 ]
                       OnTrue:
-                        - set: [ src.ach_defeat_skeleton, 1]
+                        - set: [ src.ach_defeat_skeleton, 1 ]
                         - reward: 1
 
       # Player attacks a cow
@@ -568,14 +536,14 @@ Actions:
                   - add: [ src.inv_food, 6 ]
                   - if:
                       Conditions:
-                        gt: [src.inv_food, 9]
+                        gt: [ src.inv_food, 9 ]
                       OnTrue:
-                        - set: [src.inv_food, 9]
+                        - set: [ src.inv_food, 9 ]
                   - if:
                       Conditions:
                         lt: [ src.ach_eat_cow, 1 ]
                       OnTrue:
-                        - set: [ src.ach_eat_cow, 1]
+                        - set: [ src.ach_eat_cow, 1 ]
                         - reward: 1
 
       # Player attacks a player
@@ -591,7 +559,7 @@ Actions:
                 Conditions:
                   lte: [ dst.health, 0 ]
                 OnTrue:
-                  - set: [ dst.player_done, 1]
+                  - set: [ dst.player_done, 1 ]
                   - decr: player_count
                   - remove: true
                   - add: [ src.inv_food, dst.inv_food ]
@@ -601,34 +569,34 @@ Actions:
                   - add: [ src.inv_iron, dst.inv_iron ]
                   - if:
                       Conditions:
-                        gt: [src.inv_food, 9]
+                        gt: [ src.inv_food, 9 ]
                       OnTrue:
-                        - set: [src.inv_food, 9]
+                        - set: [ src.inv_food, 9 ]
                   - if:
                       Conditions:
-                        gt: [src.inv_drink, 9]
+                        gt: [ src.inv_drink, 9 ]
                       OnTrue:
-                        - set: [src.inv_drink, 9]
+                        - set: [ src.inv_drink, 9 ]
                   - if:
                       Conditions:
-                        gt: [src.inv_wood, 9]
+                        gt: [ src.inv_wood, 9 ]
                       OnTrue:
-                        - set: [src.inv_wood, 9]
+                        - set: [ src.inv_wood, 9 ]
                   - if:
                       Conditions:
-                        gt: [src.inv_coal, 9]
+                        gt: [ src.inv_coal, 9 ]
                       OnTrue:
-                        - set: [src.inv_coal, 9]
+                        - set: [ src.inv_coal, 9 ]
                   - if:
                       Conditions:
-                        gt: [src.inv_iron, 9]
+                        gt: [ src.inv_iron, 9 ]
                       OnTrue:
-                        - set: [src.inv_iron, 9]
+                        - set: [ src.inv_iron, 9 ]
                   - if:
                       Conditions:
                         lt: [ src.ach_defeat_player, 1 ]
                       OnTrue:
-                        - set: [ src.ach_defeat_player, 1]
+                        - set: [ src.ach_defeat_player, 1 ]
                         - reward: 1
 
 
@@ -694,7 +662,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_wood, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_wood, 1]
+                  - set: [ ach_collect_wood, 1 ]
                   - reward: 1
         Dst:
           Object: tree
@@ -717,7 +685,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_stone, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_stone, 1]
+                  - set: [ ach_collect_stone, 1 ]
                   - reward: 1
         Dst:
           Object: stone
@@ -740,7 +708,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_coal, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_coal, 1]
+                  - set: [ ach_collect_coal, 1 ]
                   - reward: 1
         Dst:
           Object: coal
@@ -763,7 +731,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_iron, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_iron, 1]
+                  - set: [ ach_collect_iron, 1 ]
                   - reward: 1
         Dst:
           Object: iron
@@ -786,7 +754,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_diamond, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_diamond, 1]
+                  - set: [ ach_collect_diamond, 1 ]
                   - reward: 1
         Dst:
           Object: diamond
@@ -808,7 +776,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_drink, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_drink, 1]
+                  - set: [ ach_collect_drink, 1 ]
                   - reward: 1
         Dst:
           Object: water
@@ -828,7 +796,7 @@ Actions:
                 Conditions:
                   lt: [ ach_collect_sapling, 1 ]
                 OnTrue:
-                  - set: [ ach_collect_sapling, 1]
+                  - set: [ ach_collect_sapling, 1 ]
                   - reward: 1
         Dst:
           Object: grass
@@ -878,7 +846,7 @@ Actions:
                 Conditions:
                   lt: [ ach_place_stone, 1 ]
                 OnTrue:
-                  - set: [ ach_place_stone, 1]
+                  - set: [ ach_place_stone, 1 ]
                   - reward: 1
         Dst:
           Object: [ grass, sand, path, water, lava ]
@@ -899,7 +867,7 @@ Actions:
                 Conditions:
                   lt: [ ach_place_table, 1 ]
                 OnTrue:
-                  - set: [ ach_place_table, 1]
+                  - set: [ ach_place_table, 1 ]
                   - reward: 1
         Dst:
           Object: [ grass, sand, path ]
@@ -920,7 +888,7 @@ Actions:
                 Conditions:
                   lt: [ ach_place_furnace, 1 ]
                 OnTrue:
-                  - set: [ ach_place_furnace, 1]
+                  - set: [ ach_place_furnace, 1 ]
                   - reward: 1
         Dst:
           Object: [ grass, sand, path ]
@@ -941,7 +909,7 @@ Actions:
                 Conditions:
                   lt: [ ach_place_plant, 1 ]
                 OnTrue:
-                  - set: [ ach_place_plant, 1]
+                  - set: [ ach_place_plant, 1 ]
                   - reward: 1
         Dst:
           Object: grass
@@ -998,7 +966,7 @@ Actions:
                 Conditions:
                   lt: [ ach_make_wood_pickaxe, 1 ]
                 OnTrue:
-                  - set: [ ach_make_wood_pickaxe, 1]
+                  - set: [ ach_make_wood_pickaxe, 1 ]
                   - reward: 1
         Dst:
           Object: player
@@ -1023,7 +991,7 @@ Actions:
                 Conditions:
                   lt: [ ach_make_stone_pickaxe, 1 ]
                 OnTrue:
-                  - set: [ ach_make_stone_pickaxe, 1]
+                  - set: [ ach_make_stone_pickaxe, 1 ]
                   - reward: 1
         Dst:
           Object: player
@@ -1051,7 +1019,7 @@ Actions:
                 Conditions:
                   lt: [ ach_make_iron_pickaxe, 1 ]
                 OnTrue:
-                  - set: [ ach_make_iron_pickaxe, 1]
+                  - set: [ ach_make_iron_pickaxe, 1 ]
                   - reward: 1
         Dst:
           Object: player
@@ -1073,7 +1041,7 @@ Actions:
                 Conditions:
                   lt: [ ach_make_wood_sword, 1 ]
                 OnTrue:
-                  - set: [ ach_make_wood_sword, 1]
+                  - set: [ ach_make_wood_sword, 1 ]
                   - reward: 1
         Dst:
           Object: player
@@ -1099,7 +1067,7 @@ Actions:
                 Conditions:
                   lt: [ ach_make_stone_sword, 1 ]
                 OnTrue:
-                  - set: [ ach_make_stone_sword, 1]
+                  - set: [ ach_make_stone_sword, 1 ]
                   - reward: 1
         Dst:
           Object: player
@@ -1128,7 +1096,7 @@ Actions:
                 Conditions:
                   lt: [ ach_make_iron_sword, 1 ]
                 OnTrue:
-                  - set: [ ach_make_iron_sword, 1]
+                  - set: [ ach_make_iron_sword, 1 ]
                   - reward: 1
         Dst:
           Object: player
@@ -1147,7 +1115,7 @@ Actions:
       - Src:
           Object: player
           Commands:
-            - set: [is_sleeping, 1]
+            - set: [ is_sleeping, 1 ]
             - set_tile: 5
         Dst:
           Object: player
@@ -1296,48 +1264,49 @@ Actions:
         Dst:
           Object: [ _boundary, cow, player, arrow, water, grass, sand, stone, plant, skeleton, zombie, coal, lava, iron, diamond, table, furnace ]
 
-#  - Name: skeleton_chase_proximity_trigger_off
-#    Trigger:
-#      Range: 9
-#      Type: RANGE_BOX_BOUNDARY
-#    InputMapping:
-#      Internal: true
-#    Behaviours:
-#      - Src:
-#          Object: skeleton
-#          Preconditions:
-#            - eq: [ src.is_chasing, 1 ]
-#          Commands:
-#            - set: [ src.is_chasing, 0 ]
-#            - exec:
-#                Action: skeleton_random_movement
-#                Delay: 3
-#                Randomize: true
-#        Dst:
-#          Object: player
-#
-#  - Name: skeleton_chase_proximity_trigger_on
-#    Trigger:
-#      Range: 8
-#      Type: RANGE_BOX_AREA
-#    InputMapping:
-#      Internal: true
-#    Behaviours:
-#      - Src:
-#          Preconditions:
-#            - eq: [ src.chase_cooldown, 0 ]
-#          Object: skeleton
-#          Commands:
-#            - set: [ src.is_chasing, 1 ]
-#            - set: [ src.chase_cooldown, 1 ]
-#            - exec:
-#                Action: skeleton_chase_player
-#                Delay: 3
-#                Search:
-#                  ImpassableObjects: [ water, cow, stone, tree, zombie, skeleton, plant, coal, lava, iron, diamond, table, furnace ]
-#                  TargetObjectName: player
-#        Dst:
-#          Object: player
+  - Name: skeleton_chase_proximity_trigger_off
+    Trigger:
+      Range: 9
+      Type: RANGE_BOX_BOUNDARY
+    InputMapping:
+      Internal: true
+    Behaviours:
+      - Src:
+          Object: skeleton
+          Preconditions:
+            - eq: [ src.is_chasing, 1 ]
+          Commands:
+            - set: [ src.is_chasing, 0 ]
+            - exec:
+                Action: skeleton_random_movement
+                Delay: 3
+                Randomize: true
+        Dst:
+          Object: player
+
+  - Name: skeleton_chase_proximity_trigger_on
+    Trigger:
+      Range: 8
+      Type: RANGE_BOX_AREA
+    InputMapping:
+      Internal: true
+    Probability: 0.3
+    Behaviours:
+      - Src:
+          Preconditions:
+            - eq: [ src.chase_cooldown, 0 ]
+          Object: skeleton
+          Commands:
+            - set: [ src.is_chasing, 1 ]
+            - set: [ src.chase_cooldown, 1 ]
+            - exec:
+                Action: skeleton_chase_player
+                Delay: 3
+                Search:
+                  ImpassableObjects: [ water, cow, stone, tree, zombie, skeleton, plant, coal, lava, iron, diamond, table, furnace ]
+                  TargetObjectName: player
+        Dst:
+          Object: player
 
   - Name: arrow_projectile
     InputMapping:
@@ -1385,7 +1354,7 @@ Actions:
                 Conditions:
                   lte: [ health, 0 ]
                 OnTrue:
-                  - set: [ dst.player_done, 1]
+                  - set: [ dst.player_done, 1 ]
                   - decr: player_count
                   - remove: true
       - Src:
@@ -1458,7 +1427,7 @@ Actions:
           Object: skeleton
 
   - Name: skeleton_fire_proximity_trigger
-    Probability: 1.0
+    Probability: 0.5
     Trigger:
       Range: 5
       Type: RANGE_BOX_AREA
@@ -1473,11 +1442,11 @@ Actions:
             - set: [ src.reload_cooldown, 1 ]
             - exec:
                 Action: reload_arrow
-                Delay: 2
+                Delay: 4
                 ActionId: 1
             - if:
                 Conditions:
-                  eq: [src._dx, 1]
+                  eq: [ src._dx, 1 ]
                 OnTrue:
                   - exec:
                       Action: fire_arrow
@@ -1485,7 +1454,7 @@ Actions:
                       ActionId: 2
             - if:
                 Conditions:
-                  eq: [src._dx, -1]
+                  eq: [ src._dx, -1 ]
                 OnTrue:
                   - exec:
                       Action: fire_arrow
@@ -1493,7 +1462,7 @@ Actions:
                       ActionId: 4
             - if:
                 Conditions:
-                  eq: [src._dy, 1]
+                  eq: [ src._dy, 1 ]
                 OnTrue:
                   - exec:
                       Action: fire_arrow
@@ -1501,7 +1470,7 @@ Actions:
                       ActionId: 3
             - if:
                 Conditions:
-                  eq: [src._dy, -1]
+                  eq: [ src._dy, -1 ]
                 OnTrue:
                   - exec:
                       Action: fire_arrow
@@ -1539,7 +1508,7 @@ Actions:
                 Delay: 3
                 Randomize: true
         Dst:
-          Object: [ _boundary, _empty, cow, water, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
+          Object: [ _boundary, _empty, cow, water, tree, stone, plant, player, zombie, skeleton, coal, lava, iron, diamond, table, furnace ]
 
   - Name: zombie_chase_player
     InputMapping:
@@ -1567,7 +1536,7 @@ Actions:
             - set: [ src.chase_cooldown, 0 ]
             - if:
                 Conditions:
-                  eq: [ src.attack_cooldown, 0]
+                  eq: [ src.attack_cooldown, 0 ]
                 OnTrue:
                   - set: [ src.attack_cooldown, 1 ]
                   - exec:
@@ -1579,7 +1548,7 @@ Actions:
           Commands:
             - if:
                 Conditions:
-                  eq: [ src.attack_cooldown, 0]
+                  eq: [ src.attack_cooldown, 0 ]
                 OnTrue:
                   - if:
                       Conditions:
@@ -1592,7 +1561,7 @@ Actions:
                       Conditions:
                         lte: [ health, 0 ]
                       OnTrue:
-                        - set: [ dst.player_done, 1]
+                        - set: [ dst.player_done, 1 ]
                         - decr: player_count
                         - remove: true
 
@@ -1623,6 +1592,7 @@ Actions:
       Type: RANGE_BOX_AREA
     InputMapping:
       Internal: true
+    Probability: 0.9
     Behaviours:
       - Src:
           Preconditions:

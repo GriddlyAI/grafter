@@ -12,7 +12,7 @@ class GrafterWrapper(gym.Wrapper):
         width,
         height,
         generator_seed=100,
-        player_observer_type=gd.ObserverType.VECTOR,
+        player_observer_type=gd.ObserverType.SPRITE_2D,
         global_observer_type=gd.ObserverType.SPRITE_2D,
         level_id=None
     ):
