@@ -134,3 +134,6 @@ dmypy.json
 # videos
 *.gif
 *.mp4
+
+# cleanrl
+grafter/train/runs/

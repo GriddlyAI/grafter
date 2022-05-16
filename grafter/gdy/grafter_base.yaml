@@ -5,6 +5,7 @@ Environment:
   Observers:
     Entity:
       IncludeMasks: true
+      Height: 7
       IncludePlayerId: [ player ]
       IncludeRotation: [ player ]
       GlobalVariableMapping:
@@ -25,8 +26,28 @@ Environment:
         - inv_energy
         - health
     Sprite2D:
-      TileSize: 10
+      TileSize: 7
       RotateAvatarImage: false
+      Height: 9
+      OffsetY: -1
+      Shader:
+        GlobalVariables:
+          - inv_wood_sword
+          - inv_stone_sword
+          - inv_iron_sword
+          - inv_wood_pickaxe
+          - inv_stone_pickaxe
+          - inv_iron_pickaxe
+          - inv_sapling
+          - inv_stone
+          - inv_coal
+          - inv_wood
+          - inv_iron
+          - inv_diamond
+          - inv_food
+          - inv_drink
+          - inv_energy
+          - health
   Termination:
     End:
       - eq: [ player_count, 0 ]
@@ -37,8 +58,8 @@ Environment:
       HighlightPlayers: false
       TrackAvatar: true
       RotateWithAvatar: false
-      Height: 9
       Width: 9
+
   Variables:
 
     # ACHIEVEMENTS
@@ -599,63 +620,20 @@ Actions:
                         - set: [ src.ach_defeat_player, 1 ]
                         - reward: 1
 
-
-  #   tree: {require: {}, receive: {wood: 1}, leaves: grass}
-  #   stone: {require: {wood_pickaxe: 1}, receive: {stone: 1}, leaves: path}
-  #   coal: {require: {wood_pickaxe: 1}, receive: {coal: 1}, leaves: path}
-  #   iron: {require: {stone_pickaxe: 1}, receive: {iron: 1}, leaves: path}
-  #   diamond: {require: {iron_pickaxe: 1}, receive: {diamond: 1}, leaves: path}
-  #   water: {require: {}, receive: {drink: 1}, leaves: water}
-  #   grass: {require: {}, receive: {sapling: 1}, probability: 0.1, leaves: grass}
-  - Name: collect
-    InputMapping:
-      Relative: true
-      Inputs:
-        1:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect wood"
-          MetaData:
-            action_id: 1
-        2:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect stone"
-          MetaData:
-            action_id: 2
-        3:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect coal"
-          MetaData:
-            action_id: 3
-        4:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect iron"
-          MetaData:
-            action_id: 4
-        5:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect diamond"
-          MetaData:
-            action_id: 5
-        6:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect water"
-          MetaData:
-            action_id: 6
-        7:
-          VectorToDest: [ 0, -1 ]
-          Description: "Collect saplings"
-          MetaData:
-            action_id: 7
-
-    Behaviours:
-      # Player collects wood from a tree
+      # Collect actions
+      #   tree: {require: {}, receive: {wood: 1}, leaves: grass}
+      #   stone: {require: {wood_pickaxe: 1}, receive: {stone: 1}, leaves: path}
+      #   coal: {require: {wood_pickaxe: 1}, receive: {coal: 1}, leaves: path}
+      #   iron: {require: {stone_pickaxe: 1}, receive: {iron: 1}, leaves: path}
+      #   diamond: {require: {iron_pickaxe: 1}, receive: {diamond: 1}, leaves: path}
+      #   water: {require: {}, receive: {drink: 1}, leaves: water}
+      #   grass: {require: {}, receive: {sapling: 1}, probability: 0.1, leaves: grass}
       - Src:
           Object: player
           Preconditions:
             - and:
                 - eq: [ is_sleeping, 0 ]
                 - lt: [ inv_wood, 9 ]
-                - eq: [ meta.action_id, 1 ]
           Commands:
             - add: [ inv_wood, 1 ]
             - if:
@@ -678,7 +656,6 @@ Actions:
                 - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_wood_pickaxe, 1 ]
                 - lt: [ inv_stone, 9 ]
-                - eq: [ meta.action_id, 2 ]
           Commands:
             - add: [ inv_stone, 1 ]
             - if:
@@ -701,7 +678,6 @@ Actions:
                 - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_wood_pickaxe, 1 ]
                 - lt: [ inv_coal, 9 ]
-                - eq: [ meta.action_id, 3 ]
           Commands:
             - add: [ inv_coal, 1 ]
             - if:
@@ -724,7 +700,6 @@ Actions:
                 - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_stone_pickaxe, 1 ]
                 - lt: [ inv_iron, 9 ]
-                - eq: [ meta.action_id, 4 ]
           Commands:
             - add: [ inv_iron, 1 ]
             - if:
@@ -747,7 +722,6 @@ Actions:
                 - eq: [ is_sleeping, 0 ]
                 - eq: [ inv_iron_pickaxe, 1 ]
                 - lt: [ inv_diamond, 9 ]
-                - eq: [ meta.action_id, 5 ]
           Commands:
             - add: [ inv_diamond, 1 ]
             - if:
@@ -769,7 +743,6 @@ Actions:
             - and:
                 - eq: [ is_sleeping, 0 ]
                 - lt: [ inv_drink, 9 ]
-                - eq: [ meta.action_id, 6 ]
           Commands:
             - add: [ inv_drink, 1 ]
             - if:
@@ -788,7 +761,6 @@ Actions:
           Preconditions:
             - and:
                 - eq: [ is_sleeping, 0 ]
-                - eq: [ meta.action_id, 7 ]
                 - lt: [ inv_sapling, 9 ]
           Commands:
             - add: [ inv_sapling, 1 ]
@@ -1875,3 +1847,87 @@ Objects:
       Sprite2D:
         - Image: sprite2d/cow-left.png
         - Image: sprite2d/cow-right.png
+
+  # Objects we only use for shaders
+  - Name: health
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/health.png
+  - Name: food
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/food.png
+  - Name: drink
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/drink.png
+  - Name: energy
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/energy.png
+
+  - Name: "1"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/1.png
+  - Name: "2"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/2.png
+  - Name: "3"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/3.png
+  - Name: "4"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/4.png
+  - Name: "5"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/5.png
+  - Name: "6"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/6.png
+  - Name: "7"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/7.png
+  - Name: "8"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/8.png
+  - Name: "9"
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/9.png
+
+  - Name: log
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/log.png
+  - Name: wood_pickaxe
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/wood_pickaxe.png
+  - Name: stone_pickaxe
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/stone_pickaxe.png
+  - Name: iron_pickaxe
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/iron_pickaxe.png
+  - Name: wood_sword
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/wood_sword.png
+  - Name: stone_sword
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/stone_sword.png
+  - Name: iron_sword
+    Observers:
+      Sprite2D:
+        - Image: sprite2d/iron_sword.png

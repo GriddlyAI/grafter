@@ -2,17 +2,25 @@ import gym
 import pygame
 from grafter.wrapper import GrafterWrapper
 
-KEYWORD_TO_KEY = {
-    (ord("a"),): [0, 1],
-    (ord("w"),): [0, 2],
-    (ord("d"),): [0, 3],
-    (ord("s"),): [0, 4],
-    (ord('r'),): [1, 1], # do
-    (ord('q'),): [2, 1], # collect
-    (ord('r'),): [3, 1], # place
-    (ord('f'),): [4, 1], # make
-}
 
+KEYWORD_TO_KEY = {
+    (ord("a"),): 1,
+    (ord("w"),): 2,
+    (ord("d"),): 3,
+    (ord("s"),): 4,
+    (ord('e'),): 5,
+    (ord('q'),): 6,
+    (ord('r'),): 7,
+    (ord('f'),): 8,
+    (ord('c'),): 9,
+    (ord('t'),): 10,
+    (ord('g'),): 11,
+    (ord('v'),): 12,
+    (ord('y'),): 13,
+    (ord('h'),): 14,
+    (ord('b'),): 15,
+    (ord('u'),): 16,
+}
 from pygame.locals import VIDEORESIZE
 
 
