@@ -150,13 +150,13 @@ void main() {
             inventoryTexture = 0;
             inventoryValueTexture = - 1;
         } else if (gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 46;
+            inventoryTexture = 47;
             inventoryValueTexture = wood_pickaxe - 1;
         } else if (gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 41;
+            inventoryTexture = 42;
             inventoryValueTexture = stone_pickaxe - 1;
         } else if (gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 25;
+            inventoryTexture = 26;
             inventoryValueTexture = iron_pickaxe - 1;
         } else if (gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
             inventoryTexture = 0;
@@ -166,13 +166,13 @@ void main() {
             inventoryTexture = 0;
             inventoryValueTexture = - 1;
         } else if (gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 47;
+            inventoryTexture = 48;
             inventoryValueTexture = wood_sword - 1;
         } else if (gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 42;
+            inventoryTexture = 43;
             inventoryValueTexture = stone_sword - 1;
         } else if (gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 19.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 26;
+            inventoryTexture = 27;
             inventoryValueTexture = iron_sword - 1;
         }
 
@@ -198,31 +198,31 @@ void main() {
         int inventoryTexture;
         int inventoryValueTexture;
         if (gl_Position.x  <= 1.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == 0.5) {
-            inventoryTexture = 23;
+            inventoryTexture = 24;
             inventoryValueTexture = health - 1;
         } else if (gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 20;
+            inventoryTexture = 21;
             inventoryValueTexture = food - 1;
         } else if (gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 17;
+            inventoryTexture = 18;
             inventoryValueTexture = drink - 1;
         } else if (gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 18;
+            inventoryTexture = 19;
             inventoryValueTexture = energy - 1;
         } else if (gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 30;
-            inventoryValueTexture = saplings -1;
+            inventoryTexture = 31;
+            inventoryValueTexture = saplings - 1;
         } else if (gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 28;
+            inventoryTexture = 29;
             inventoryValueTexture = wood - 1;
         } else if (gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 40;
+            inventoryTexture = 41;
             inventoryValueTexture = stone - 1;
         } else if (gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 13;
+            inventoryTexture = 14;
             inventoryValueTexture = coal - 1;
         } else if (gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 19.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 24;
+            inventoryTexture = 25;
             inventoryValueTexture = iron - 1;
         }
 

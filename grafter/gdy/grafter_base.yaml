@@ -25,11 +25,22 @@ Environment:
         - inv_drink
         - inv_energy
         - health
-    Sprite2D:
+    GlobalSprite2D:
+      Type: SPRITE_2D
       TileSize: 24
       RotateAvatarImage: false
+      HighlightPlayers: true
+    PlayerSprite2D:
+      Type: SPRITE_2D
+      TileSize: 24
+      RotateAvatarImage: false
+      TrackAvatar: true
+      Width: 9
       Height: 9
       OffsetY: -1
+      PaddingTile: sprite2d/padding.png
+      ResourceConfig:
+        ShaderPath: "../assets/shaders"
       Shader:
         GlobalVariables:
           - inv_wood_sword
@@ -54,11 +65,6 @@ Environment:
   Player:
     Count: 1
     AvatarObject: player
-    Observer:
-      HighlightPlayers: false
-      TrackAvatar: true
-      RotateWithAvatar: false
-      Width: 9
 
   Variables:
 
@@ -1094,6 +1100,8 @@ Actions:
           Description: "Go to sleep"
     Behaviours:
       - Src:
+          Preconditions:
+            - lt: [ inv_energy, 9 ]
           Object: player
           Commands:
             - set: [ is_sleeping, 1 ]
@@ -1683,7 +1691,14 @@ Objects:
         ActionId: 1
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/player.png
+        - Image: sprite2d/player-left.png
+        - Image: sprite2d/player-up.png
+        - Image: sprite2d/player-right.png
+        - Image: sprite2d/player-down.png
+        - Image: sprite2d/player-sleep.png
+      PlayerSprite2D:
         - Image: sprite2d/player.png
         - Image: sprite2d/player-left.png
         - Image: sprite2d/player-up.png
@@ -1696,38 +1711,50 @@ Objects:
     MapCharacter: W
     Z: 1
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/water.png
+      PlayerSprite2D:
         - Image: sprite2d/water.png
   - Name: grass
     MapCharacter: G
     Z: 1
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/grass.png
+      PlayerSprite2D:
         - Image: sprite2d/grass.png
   - Name: stone
     MapCharacter: s
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/stone.png
+      PlayerSprite2D:
         - Image: sprite2d/stone.png
   - Name: path
     Z: 1
     MapCharacter: P
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/path.png
+      PlayerSprite2D:
         - Image: sprite2d/path.png
   - Name: sand
     Z: 1
     MapCharacter: S
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/sand.png
+      PlayerSprite2D:
         - Image: sprite2d/sand.png
 
   - Name: tree
     Z: 1
     MapCharacter: T
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/tree.png
+      PlayerSprite2D:
         - Image: sprite2d/tree.png
 
 
@@ -1742,7 +1769,10 @@ Objects:
         Delay: 30
         ActionId: 1
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/plant.png
+        - Image: sprite2d/plant-ripe.png
+      PlayerSprite2D:
         - Image: sprite2d/plant.png
         - Image: sprite2d/plant-ripe.png
 
@@ -1750,44 +1780,58 @@ Objects:
     MapCharacter: L
     Z: 1
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/lava.png
+      PlayerSprite2D:
         - Image: sprite2d/lava.png
   - Name: coal
     MapCharacter: c
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/coal.png
+      PlayerSprite2D:
         - Image: sprite2d/coal.png
   - Name: iron
     MapCharacter: i
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/iron.png
+      PlayerSprite2D:
         - Image: sprite2d/iron.png
   - Name: diamond
     MapCharacter: d
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/diamond.png
+      PlayerSprite2D:
         - Image: sprite2d/diamond.png
   - Name: table
     MapCharacter: t
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/table.png
+      PlayerSprite2D:
         - Image: sprite2d/table.png
   - Name: furnace
     MapCharacter: f
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/furnace.png
+      PlayerSprite2D:
         - Image: sprite2d/furnace.png
 
   - Name: fence
     MapCharacter: "}"
     Z: 2
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/fence.png
+      PlayerSprite2D:
         - Image: sprite2d/fence.png
 
   - Name: arrow
@@ -1799,7 +1843,12 @@ Objects:
       - Action: set_arrow_direction
         ActionId: 1
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/arrow-up.png
+        - Image: sprite2d/arrow-right.png
+        - Image: sprite2d/arrow-down.png
+        - Image: sprite2d/arrow-left.png
+      PlayerSprite2D:
         - Image: sprite2d/arrow-up.png
         - Image: sprite2d/arrow-right.png
         - Image: sprite2d/arrow-down.png
@@ -1821,7 +1870,9 @@ Objects:
         InitialValue: 0
     MapCharacter: '!'
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/zombie.png
+      PlayerSprite2D:
         - Image: sprite2d/zombie.png
 
   - Name: skeleton
@@ -1840,7 +1891,9 @@ Objects:
       - Name: reload_cooldown
         InitialValue: 0
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/skeleton.png
+      PlayerSprite2D:
         - Image: sprite2d/skeleton.png
 
   - Name: cow
@@ -1853,7 +1906,10 @@ Objects:
     Z: 2
     MapCharacter: '#'
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/cow-left.png
+        - Image: sprite2d/cow-right.png
+      PlayerSprite2D:
         - Image: sprite2d/cow-left.png
         - Image: sprite2d/cow-right.png
 
@@ -1861,102 +1917,142 @@ Objects:
   - Name: health
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/health.png
+      PlayerSprite2D:
         - Image: sprite2d/health.png
   - Name: food
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/food.png
+      PlayerSprite2D:
         - Image: sprite2d/food.png
   - Name: drink
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/drink.png
+      PlayerSprite2D:
         - Image: sprite2d/drink.png
   - Name: energy
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/energy.png
+      PlayerSprite2D:
         - Image: sprite2d/energy.png
 
   - Name: "1"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/1.png
+      PlayerSprite2D:
         - Image: sprite2d/1.png
   - Name: "2"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/2.png
+      PlayerSprite2D:
         - Image: sprite2d/2.png
   - Name: "3"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/3.png
+      PlayerSprite2D:
         - Image: sprite2d/3.png
   - Name: "4"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/4.png
+      PlayerSprite2D:
         - Image: sprite2d/4.png
   - Name: "5"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/5.png
+      PlayerSprite2D:
         - Image: sprite2d/5.png
   - Name: "6"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/6.png
+      PlayerSprite2D:
         - Image: sprite2d/6.png
   - Name: "7"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/7.png
+      PlayerSprite2D:
         - Image: sprite2d/7.png
   - Name: "8"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/8.png
+      PlayerSprite2D:
         - Image: sprite2d/8.png
   - Name: "9"
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/9.png
+      PlayerSprite2D:
         - Image: sprite2d/9.png
 
   - Name: log
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/log.png
+      PlayerSprite2D:
         - Image: sprite2d/log.png
   - Name: wood_pickaxe
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/wood_pickaxe.png
+      PlayerSprite2D:
         - Image: sprite2d/wood_pickaxe.png
   - Name: stone_pickaxe
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/stone_pickaxe.png
+      PlayerSprite2D:
         - Image: sprite2d/stone_pickaxe.png
   - Name: iron_pickaxe
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/iron_pickaxe.png
+      PlayerSprite2D:
         - Image: sprite2d/iron_pickaxe.png
   - Name: wood_sword
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/wood_sword.png
+      PlayerSprite2D:
         - Image: sprite2d/wood_sword.png
   - Name: stone_sword
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/stone_sword.png
+      PlayerSprite2D:
         - Image: sprite2d/stone_sword.png
   - Name: iron_sword
     Internal: True
     Observers:
-      Sprite2D:
+      GlobalSprite2D:
+        - Image: sprite2d/iron_sword.png
+      PlayerSprite2D:
         - Image: sprite2d/iron_sword.png

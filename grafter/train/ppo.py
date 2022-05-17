@@ -89,7 +89,7 @@ def parse_args():
 
 def make_env(height, width, observer_type, seed, idx, capture_video, run_name):
     def thunk():
-        env = GrafterWrapper(height, width, seed, player_observer_type=observer_type)
+        env = GrafterWrapper(height, width, generator_seed=seed, player_observer_type=observer_type)
         env = gym.wrappers.RecordEpisodeStatistics(env)
         if capture_video:
             if idx == 0:
