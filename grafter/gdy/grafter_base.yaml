@@ -26,7 +26,7 @@ Environment:
         - inv_energy
         - health
     Sprite2D:
-      TileSize: 7
+      TileSize: 24
       RotateAvatarImage: false
       Height: 9
       OffsetY: -1
@@ -264,7 +264,7 @@ Actions:
                 ActionId: 1
                 Delay: 1
 
-      # handle fatigue
+      # Handle fatigue
       - Src:
           Object: player
         Dst:
@@ -297,12 +297,14 @@ Actions:
                               - set_tile: 0
             - if:
                 Conditions:
-                  gt: [ fatigue, 30 ]
+                  and:
+                    - gt: [ inv_energy, 0 ]
+                    - gt: [ fatigue, 30 ]
                 OnTrue:
                   - set: [ fatigue, 0 ]
                   - sub: [ inv_energy, 1 ]
 
-      # handle hunger
+      # Handle hunger
       - Src:
           Object: player
         Dst:
@@ -317,13 +319,15 @@ Actions:
                   - add: [ hunger, 2 ]
             - if:
                 Conditions:
-                  gt: [ hunger, 50 ]
+                  and:
+                    - gt: [ inv_food, 0 ]
+                    - gt: [ hunger, 50 ]
                 OnTrue:
                   - set: [ hunger, 0 ]
                   - sub: [ inv_food, 1 ]
 
 
-      # handle thirst
+      # Handle thirst
       - Src:
           Object: player
         Dst:
@@ -338,13 +342,15 @@ Actions:
                   - add: [ thirst, 2 ]
             - if:
                 Conditions:
-                  gt: [ thirst, 30 ]
+                  and:
+                    - gt: [ inv_drink, 0 ]
+                    - gt: [ thirst, 30 ]
                 OnTrue:
                   - set: [ thirst, 0 ]
                   - sub: [ inv_drink, 1 ]
 
 
-      # handle health recovery
+      # Handle health recovery
       - Src:
           Object: player
         Dst:
@@ -932,6 +938,7 @@ Actions:
                 - eq: [ meta.action_id, 1 ]
                 - gte: [ inv_wood, 1 ]
                 - lt: [ inv_wood_pickaxe, 1 ]
+                - eq: [ near_table, 1 ]
           Commands:
             - decr: inv_wood
             - if:
@@ -1003,10 +1010,12 @@ Actions:
           Object: player
           Preconditions:
             - and:
+                - eq: [ near_table, 1 ]
                 - eq: [ is_sleeping, 0 ]
                 - eq: [ meta.action_id, 4 ]
                 - gte: [ inv_wood, 1 ]
                 - lt: [ inv_wood_sword, 1 ]
+
           Commands:
             - decr: inv_wood
             - if:
@@ -1850,84 +1859,104 @@ Objects:
 
   # Objects we only use for shaders
   - Name: health
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/health.png
   - Name: food
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/food.png
   - Name: drink
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/drink.png
   - Name: energy
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/energy.png
 
   - Name: "1"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/1.png
   - Name: "2"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/2.png
   - Name: "3"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/3.png
   - Name: "4"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/4.png
   - Name: "5"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/5.png
   - Name: "6"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/6.png
   - Name: "7"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/7.png
   - Name: "8"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/8.png
   - Name: "9"
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/9.png
 
   - Name: log
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/log.png
   - Name: wood_pickaxe
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/wood_pickaxe.png
   - Name: stone_pickaxe
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/stone_pickaxe.png
   - Name: iron_pickaxe
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/iron_pickaxe.png
   - Name: wood_sword
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/wood_sword.png
   - Name: stone_sword
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/stone_sword.png
   - Name: iron_sword
+    Internal: True
     Observers:
       Sprite2D:
         - Image: sprite2d/iron_sword.png

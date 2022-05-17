@@ -11,11 +11,16 @@ layout(location = 0) out vec4 outFragColor;
 
 void main() {
   if(inRenderInventory == 1) {
-    vec4 valueColor = texture(samplerArray, inFragTextureVariableCoords/2.0) * inLightLevel;
-    if (valueColor.w == 0) {
-      outFragColor = texture(samplerArray, inFragTextureCoords) * inLightLevel;
+    vec3 scale = vec3(2.0,2.0,1);
+    if(inFragTextureVariableCoords.x > 0.5 && inFragTextureVariableCoords.y > 0.5) {
+      vec4 valueColor = texture(samplerArray, scale*inFragTextureVariableCoords) * inLightLevel;
+      if (valueColor.w == 0) {
+        outFragColor = texture(samplerArray, inFragTextureCoords) * inLightLevel;
+      } else {
+        outFragColor = valueColor;
+      }
     } else {
-      outFragColor = valueColor;
+      outFragColor = texture(samplerArray, inFragTextureCoords) * inLightLevel;
     }
 
   } else {

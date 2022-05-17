@@ -90,12 +90,13 @@ food = 20
 health = 23
 log = 28
 stone = 40
+plant = 30
 stone_pickaxe = 41
 stone_sword = 42
 coal = 13
 iron = 24
-iron_pickaxe = 26
-iron_sword = 27
+iron_pickaxe = 25
+iron_sword = 26
 wood_pickaxe = 46
 wood_sword = 47
 */
@@ -104,6 +105,8 @@ wood_sword = 47
 void main() {
     ObjectData object = objectDataBuffer.variables[pushConsts.idx];
 
+    vec2 gridDims = environmentData.gridDims;
+
     float steps = float(globalVariableBuffer.variables[0].value);
 
     int health = int(globalVariableBuffer.variables[16].value);
@@ -111,10 +114,20 @@ void main() {
     int drink = int(globalVariableBuffer.variables[14].value);
     int energy = int(globalVariableBuffer.variables[15].value);
 
+    int saplings = int(globalVariableBuffer.variables[7].value);
+
     int wood = int(globalVariableBuffer.variables[10].value);
     int stone = int(globalVariableBuffer.variables[8].value);
     int coal = int(globalVariableBuffer.variables[9].value);
     int iron = int(globalVariableBuffer.variables[11].value);
+
+    int wood_sword = int(globalVariableBuffer.variables[1].value);
+    int stone_sword = int(globalVariableBuffer.variables[2].value);
+    int iron_sword = int(globalVariableBuffer.variables[3].value);
+
+    int wood_pickaxe = int(globalVariableBuffer.variables[4].value);
+    int stone_pickaxe = int(globalVariableBuffer.variables[5].value);
+    int iron_pickaxe = int(globalVariableBuffer.variables[6].value);
 
     mat4 mvp = environmentData.projectionMatrix * environmentData.viewMatrix * object.modelMatrix;
 
@@ -126,47 +139,44 @@ void main() {
 
     gl_Position = pos;
 
-
-
-    if (gl_Position.y >= 15.0/9.0 - 1.0 && (gl_Position.y <= 15.0/9.0 - 1.0 && inPosition.y == -0.5 || gl_Position.y <= 17.0/9.0 - 1.0 && inPosition.y == 0.5)) {
-
+    if (gl_Position.y >= 15.0/gridDims.y - 1.0 && inPosition.y == -0.5 || gl_Position.y >= 17.0/gridDims.y - 1.0 && inPosition.y == 0.5) {
         outRenderInventory = 1;
 
         outLightLevel = vec4(1);
 
         int inventoryTexture;
         int inventoryValueTexture;
-        if (gl_Position.x  <= 1.0/9.0 - 1 && inPosition.x == -0.5 || gl_Position.x <= 3.0/9.0 - 1 && inPosition.x == 0.5) {
-            inventoryTexture = 23;
-            inventoryValueTexture = health;
-        } else if (gl_Position.x <= 3.0/9.0 - 1 && inPosition.x == -0.5 || gl_Position.x <= 5.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 20;
-            inventoryValueTexture = food;
-        } else if (gl_Position.x <= 5.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 7.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 17;
-            inventoryValueTexture = drink;
-        } else if (gl_Position.x <= 7.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 9.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 18;
-            inventoryValueTexture = energy;
-        } else if (gl_Position.x <= 9.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 11.0/9.0 - 1.0 && inPosition.x == 0.5) {
+        if (gl_Position.x  <= 1.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == 0.5) {
             inventoryTexture = 0;
-            inventoryValueTexture = 0;
+            inventoryValueTexture = - 1;
+        } else if (gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 46;
+            inventoryValueTexture = wood_pickaxe - 1;
+        } else if (gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 41;
+            inventoryValueTexture = stone_pickaxe - 1;
+        } else if (gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 25;
+            inventoryValueTexture = iron_pickaxe - 1;
+        } else if (gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 0;
+            inventoryValueTexture = - 1;
 
-        } else if (gl_Position.x <= 11.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 13.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 28;
-            inventoryValueTexture = wood;
-        } else if (gl_Position.x <= 13.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 15.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 40;
-            inventoryValueTexture = stone;
-        } else if (gl_Position.x <= 15.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 17.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 13;
-            inventoryValueTexture = coal;
-        } else if (gl_Position.x <= 17.0/9.0 - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 19.0/9.0 - 1.0 && inPosition.x == 0.5) {
-            inventoryTexture = 24;
-            inventoryValueTexture = iron;
+        } else if (gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 0;
+            inventoryValueTexture = - 1;
+        } else if (gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 47;
+            inventoryValueTexture = wood_sword - 1;
+        } else if (gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 42;
+            inventoryValueTexture = stone_sword - 1;
+        } else if (gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 19.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 26;
+            inventoryValueTexture = iron_sword - 1;
         }
 
-        if (inventoryValueTexture == 0) {
+        if (inventoryValueTexture == -1) {
             outLightLevel = vec4(0);
         }
 
@@ -180,6 +190,55 @@ void main() {
         inFragTextureCoords.y,
         inventoryValueTexture);
 
+    } else if (gl_Position.y >= 13.0/gridDims.y - 1.0 && inPosition.y == -0.5 || gl_Position.y >= 15.0/gridDims.y - 1.0 && inPosition.y == 0.5) {
+        outRenderInventory = 1;
+
+        outLightLevel = vec4(1);
+
+        int inventoryTexture;
+        int inventoryValueTexture;
+        if (gl_Position.x  <= 1.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == 0.5) {
+            inventoryTexture = 23;
+            inventoryValueTexture = health - 1;
+        } else if (gl_Position.x <= 3.0/gridDims.x - 1 && inPosition.x == -0.5 || gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 20;
+            inventoryValueTexture = food - 1;
+        } else if (gl_Position.x <= 5.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 17;
+            inventoryValueTexture = drink - 1;
+        } else if (gl_Position.x <= 7.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 18;
+            inventoryValueTexture = energy - 1;
+        } else if (gl_Position.x <= 9.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 30;
+            inventoryValueTexture = saplings -1;
+        } else if (gl_Position.x <= 11.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 28;
+            inventoryValueTexture = wood - 1;
+        } else if (gl_Position.x <= 13.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 40;
+            inventoryValueTexture = stone - 1;
+        } else if (gl_Position.x <= 15.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 13;
+            inventoryValueTexture = coal - 1;
+        } else if (gl_Position.x <= 17.0/gridDims.x - 1.0 && inPosition.x == -0.5 || gl_Position.x <= 19.0/gridDims.x - 1.0 && inPosition.x == 0.5) {
+            inventoryTexture = 24;
+            inventoryValueTexture = iron - 1;
+        }
+
+        if (inventoryValueTexture == -1) {
+            outLightLevel = vec4(0);
+        }
+
+        outFragTextureCoords = vec3(
+        inFragTextureCoords.x,
+        inFragTextureCoords.y,
+        inventoryTexture);
+
+        outFragTextureVariableCoords = vec3(
+        inFragTextureCoords.x,
+        inFragTextureCoords.y,
+        inventoryValueTexture);
     } else {
 
         outRenderInventory = 0;
