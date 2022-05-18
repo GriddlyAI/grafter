@@ -34,16 +34,16 @@ A list of all possible variables can be found in the `grafter_base.yaml` GDY fil
 
 A global view of the entire environment with players highlighted:
 
-![multi-agent obs](https://github.com/Bam4d/grafter/tree/main/media/initial_obs_global.png)
+![multi-agent obs](https://github.com/Bam4d/grafter/tree/raw/main/media/initial_obs_global.png)
 
 ### PlayerSprite2D
 
 The traditional *crafter* environment observation space, with inventory rendered below the agent's view of the environment:
 
-![player 1 obs](https://github.com/Bam4d/grafter/tree/main/media/initial_obs_player1.png)
-![player 2 obs](https://github.com/Bam4d/grafter/tree/main/media/initial_obs_player2.png)
-![player 3 obs](https://github.com/Bam4d/grafter/tree/main/media/initial_obs_player3.png)
-![player 4 obs](https://github.com/Bam4d/grafter/tree/main/media/initial_obs_player4.png)
+![player 1 obs](https://github.com/Bam4d/grafter/tree/raw/main/media/initial_obs_player1.png)
+![player 2 obs](https://github.com/Bam4d/grafter/tree/raw/main/media/initial_obs_player2.png)
+![player 3 obs](https://github.com/Bam4d/grafter/tree/raw/main/media/initial_obs_player3.png)
+![player 4 obs](https://github.com/Bam4d/grafter/tree/raw/main/media/initial_obs_player4.png)
 
 ### Entity
 
