@@ -5,6 +5,7 @@ Environment:
   Observers:
     Entity:
       IncludeMasks: true
+      TrackAvatar: true
       Width: 9
       Height: 7
       OffsetY: -1
@@ -70,7 +71,9 @@ Environment:
           - health
   Termination:
     End:
-      - eq: [ player_count, 0 ]
+      - or:
+          - eq: [ _steps, 10000 ]
+          - eq: [ player_count, 0 ]
   Player:
     Colors:
       - [0.8,0.8,0]
@@ -849,6 +852,7 @@ Actions:
         Dst:
           Object: [ grass, sand, path, water, lava ]
           Commands:
+            - remove: true
             - spawn: stone
 
       # Player places a table
