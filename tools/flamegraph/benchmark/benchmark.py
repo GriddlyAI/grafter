@@ -10,7 +10,7 @@ from grafter.wrapper import GrafterWrapper
 
 if __name__ == "__main__":
 
-    env = GrafterWrapper(64, 64)
+    env = GrafterWrapper(64, 64, player_observer_type="Vector")
 
     start = timeit.default_timer()
 
@@ -26,6 +26,8 @@ if __name__ == "__main__":
 
         # env.render()
         # env.render(observer='global')
+
+        getGlobalVariables()
 
         if done:
             end = timeit.default_timer()

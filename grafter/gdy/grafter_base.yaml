@@ -5,7 +5,9 @@ Environment:
   Observers:
     Entity:
       IncludeMasks: true
+      Width: 9
       Height: 7
+      OffsetY: -1
       IncludePlayerId: [ player ]
       IncludeRotation: [ player ]
       GlobalVariableMapping:
@@ -25,6 +27,13 @@ Environment:
         - inv_drink
         - inv_energy
         - health
+    Vector:
+      IncludeVariables: true
+      IncludePlayerId: true
+      IncludeRotation: true
+      Width: 9
+      Height: 7
+      OffsetY: -1
     GlobalSprite2D:
       Type: SPRITE_2D
       TileSize: 24
@@ -63,6 +72,11 @@ Environment:
     End:
       - eq: [ player_count, 0 ]
   Player:
+    Colors:
+      - [0.6,0.6,0]
+      - [0.6,0.3,0.3]
+      - [0.3,0,0.6]
+      - [0.0,0.6,0.6]
     Count: 1
     AvatarObject: player
 
